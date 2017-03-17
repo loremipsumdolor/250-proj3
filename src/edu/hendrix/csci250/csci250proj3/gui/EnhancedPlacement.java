@@ -12,6 +12,7 @@ public class EnhancedPlacement extends Application {
 		try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("EnhancedPlacementGUI.fxml"));
 			Scene scene = new Scene(root);
+			primaryStage.setTitle("Enhanced Placement");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
