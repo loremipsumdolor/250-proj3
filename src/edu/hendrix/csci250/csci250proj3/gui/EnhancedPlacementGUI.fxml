@@ -24,8 +24,8 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Search">
               <items>
-                <MenuItem mnemonicParsing="false" text="Basic Search" />
-                  <MenuItem mnemonicParsing="false" text="Advanced Search" />
+                <MenuItem fx:id="basicSearchMenuItem" mnemonicParsing="false" text="Basic Search" />
+                <MenuItem fx:id="advancedSearchMenuItem" mnemonicParsing="false" text="Advanced Search" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -41,8 +41,8 @@
         <columns>
           <TableColumn editable="false" prefWidth="100.0" text="Course Code" />
           <TableColumn editable="false" prefWidth="100.0" text="Course Title" />
-            <TableColumn editable="false" prefWidth="100.0" text="Professor" />
-            <TableColumn editable="false" prefWidth="100.0" text="Time" />
+          <TableColumn editable="false" prefWidth="100.0" text="Professor" />
+          <TableColumn editable="false" prefWidth="100.0" text="Time" />
         </columns>
       </TableView>
    </center>
