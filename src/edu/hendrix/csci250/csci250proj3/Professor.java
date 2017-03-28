@@ -4,32 +4,16 @@ import java.util.ArrayList;
 
 public class Professor {
 	
-	private String name, office, email, phone;
-	// private Image picture;
+	private String name, office, email, phone, picture;
 	private ArrayList<Course> coursesTeaching;
 	
-	public Professor(String name, String office, String email, String phone) {
+	public Professor(String name, String office, String email, String phone, String picture) {
 		this.name = name;
 		this.office = office;
 		this.email = email;
 		this.phone = phone;
 		this.coursesTeaching = new ArrayList<Course>();
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setOffice(String office) {
-		this.office = office;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public void setPhone(String phone) {
-		this.phone = phone;
+		this.picture = picture;
 	}
 	
 	public void addCourse(Course course) {
@@ -54,5 +38,9 @@ public class Professor {
 	
 	public ArrayList<Course> getCourseList() {
 		return this.coursesTeaching;
+	}
+	
+	public String getPicture() {
+		return this.picture;
 	}
 }
