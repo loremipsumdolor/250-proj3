@@ -10,7 +10,7 @@ public class Course {
 	
 	public Course() {}
 	
-	public Course(String courseCode, String semester, String subjectCode, String courseNumber, String sectionNumber, String title, String period, String building, String room, String description, int fastSearch, ArrayList<String> collegeCodes, ArrayList<String> instructors) {
+	public Course(String courseCode, String semester, String subjectCode, String courseNumber, String sectionNumber, int fastSearch, String title, ArrayList<String> instructors, String period, String building, String room, String description, ArrayList<String> collegeCodes) {
 		this.courseCode = courseCode;
 		this.semester = semester;
 		this.subjectCode = subjectCode;

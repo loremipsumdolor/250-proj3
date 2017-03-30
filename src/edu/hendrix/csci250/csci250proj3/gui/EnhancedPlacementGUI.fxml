@@ -13,13 +13,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+              <MenuItem fx:id="refreshMenuItem" mnemonicParsing="false" text="Refresh" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem fx:id="editCourseMenuItem" mnemonicParsing="false" text="Edit Course" />
-              <MenuItem fx:id="editProfessorMenuItem" mnemonicParsing="false" text="Edit Professor" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Search">
@@ -43,6 +38,7 @@
           <TableColumn editable="false" prefWidth="100.0" text="Course Title" />
           <TableColumn editable="false" prefWidth="100.0" text="Professor" />
           <TableColumn editable="false" prefWidth="100.0" text="Time" />
+          <TableColumn editable="false" prefWidth="100.0" text="Search Code" />
         </columns>
       </TableView>
    </center>

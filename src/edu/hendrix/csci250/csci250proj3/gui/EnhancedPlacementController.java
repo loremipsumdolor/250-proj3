@@ -9,11 +9,9 @@ import javafx.scene.control.Alert.AlertType;
 
 public class EnhancedPlacementController {
 	@FXML
+	MenuItem refreshMenuItem;
+	@FXML
 	MenuItem exitMenuItem;
-	@FXML
-	MenuItem editCourseMenuItem;
-	@FXML
-	MenuItem editProfessorMenuItem;
 	@FXML
 	MenuItem basicSearchMenuItem;
 	@FXML
