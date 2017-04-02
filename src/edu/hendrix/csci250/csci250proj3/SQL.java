@@ -46,7 +46,7 @@ public class SQL {
 		return courseData;
 	}
 	
-	public ArrayList<Course> getAllCourses() {
+	public static ArrayList<Course> getAllCourses() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");

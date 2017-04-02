@@ -1,13 +1,19 @@
 package edu.hendrix.csci250.csci250proj3.gui;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import edu.hendrix.csci250.csci250proj3.Course;
+import edu.hendrix.csci250.csci250proj3.SQL;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 
 public class EnhancedPlacementController {
@@ -23,9 +29,27 @@ public class EnhancedPlacementController {
 	MenuItem aboutMenuItem;
 	@FXML
 	TableView<Course> courseList;
+	@FXML
+	TableColumn<Course, String> courseCodeColumn;
+	@FXML
+	TableColumn<Course, String> courseTitleColumn;
+	@FXML
+	TableColumn<Course, String> professorColumn;
+	@FXML
+	TableColumn<Course, String> timeColumn;
+	@FXML
+	TableColumn<Course, Integer> searchCodeColumn;
 	
 	@FXML
 	private void initialize() {
+		ArrayList<Course> courses = SQL.getAllCourses();
+		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+		courseCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("courseCode"));
+		courseTitleColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("title"));
+		professorColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("instructors"));
+		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
+		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
+		courseList.getItems().addAll(coursesToAdd);
 	}
 	
 	@FXML

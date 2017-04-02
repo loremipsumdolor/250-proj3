@@ -34,11 +34,11 @@
    <center>
       <TableView fx:id="courseList" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn editable="false" prefWidth="100.0" text="Course Code" />
-          <TableColumn editable="false" prefWidth="100.0" text="Course Title" />
-          <TableColumn editable="false" prefWidth="100.0" text="Professor" />
-          <TableColumn editable="false" prefWidth="100.0" text="Time" />
-          <TableColumn editable="false" prefWidth="100.0" text="Search Code" />
+          <TableColumn fx:id="courseCodeColumn" editable="false" prefWidth="100.0" text="Course Code" />
+          <TableColumn fx:id="courseTitleColumn" editable="false" prefWidth="100.0" text="Course Title" />
+          <TableColumn fx:id="professorColumn" editable="false" prefWidth="100.0" text="Professor" />
+          <TableColumn fx:id="timeColumn" editable="false" prefWidth="100.0" text="Time" />
+          <TableColumn fx:id="searchCodeColumn" editable="false" prefWidth="100.0" text="Search Code" />
         </columns>
       </TableView>
    </center>
