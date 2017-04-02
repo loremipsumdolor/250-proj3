@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SQL {
-	private Connection c;
-	private Statement stmt;
+	private static Connection c;
+	private static Statement stmt;
 	
-	public Course getCourse(int fastSearchCode) {
+	public static Course getCourse(int fastSearchCode) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
