@@ -19,7 +19,7 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Search">
               <items>
-                <MenuItem fx:id="basicSearchMenuItem" mnemonicParsing="false" text="Basic Search" />
+                <MenuItem fx:id="basicSearchMenuItem" mnemonicParsing="false" onAction="#basicSearch" text="Basic Search" />
                 <MenuItem fx:id="advancedSearchMenuItem" mnemonicParsing="false" text="Advanced Search" />
               </items>
             </Menu>
