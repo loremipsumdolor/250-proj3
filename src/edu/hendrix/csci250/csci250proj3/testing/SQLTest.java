@@ -33,13 +33,5 @@ public class SQLTest {
 		assertEquals(testCourse.getSubjectCode(), sqlCourse.getSubjectCode());
 		assertEquals(testCourse.getTitle(), sqlCourse.getTitle());
 	}
-	
-	@Test(expected=Error.class)
-	public void cantChangeCourseTest() {
-		private Course testCourse = new Course("CSCI 352 01", "2S", "CSCI", "352", "01", 24196,
-				"Scalable Software", new ArrayList<String>(Arrays.asList("Ferrer, Gabe")),
-				"A3", "MCREY", "315", "Introduction to the computer science concepts necessary for the development of large software systems. Further exploration of object-oriented development, testing, and version control techniques introduced in CSCI 151. Emphasis placed on user-centric interface design and writing precise requirements. Projects incorporate relevant technologies for modern software design, including network programming, databases, and mobile devices. Assignments emphasize the integration of multiple concepts in the context of developing realistic software applications. Students complete several projects in teams. Prerequisite: CSCI 151", new ArrayList<String>(Arrays.asList("NS")));
-		
-	}
 
 }
