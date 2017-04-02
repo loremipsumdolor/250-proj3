@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,6 +52,18 @@ public class EnhancedPlacementController {
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
 		courseList.getItems().addAll(coursesToAdd);
+		
+		// needs to be fixed yet
+		courseList.getScene().widthProperty().addListener(new ChangeListener<Number>() {
+		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+		        double newColumnWidth = newSceneWidth.doubleValue() / 5;
+		        courseCodeColumn.setPrefWidth(newColumnWidth);
+		        courseTitleColumn.setPrefWidth(newColumnWidth);
+		        professorColumn.setPrefWidth(newColumnWidth);
+		        timeColumn.setPrefWidth(newColumnWidth);
+		        searchCodeColumn.setPrefWidth(newColumnWidth);
+		    }
+		});
 	}
 	
 	@FXML
