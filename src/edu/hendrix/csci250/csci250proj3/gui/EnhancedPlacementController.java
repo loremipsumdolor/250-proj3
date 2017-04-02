@@ -10,12 +10,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 
 public class EnhancedPlacementController {
@@ -41,7 +46,7 @@ public class EnhancedPlacementController {
 	TableColumn<Course, String> timeColumn;
 	@FXML
 	TableColumn<Course, Integer> searchCodeColumn;
-	
+
 	@FXML
 	private void initialize() {
 		ArrayList<Course> courses = SQL.getAllCourses();
@@ -52,7 +57,6 @@ public class EnhancedPlacementController {
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
 		courseList.getItems().addAll(coursesToAdd);
-		
 		// needs to be fixed yet
 		courseList.getScene().widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
@@ -62,6 +66,23 @@ public class EnhancedPlacementController {
 		        professorColumn.setPrefWidth(newColumnWidth);
 		        timeColumn.setPrefWidth(newColumnWidth);
 		        searchCodeColumn.setPrefWidth(newColumnWidth);
+		    }
+		});
+		courseList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+		    if (newSelection != null) {
+		    	try {
+					Stage dialog = new Stage();
+					dialog.initModality(Modality.APPLICATION_MODAL);
+					dialog.initOwner(courseList.getScene().getWindow());
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("EnhancedPlacementCourseGUI.fxml"));
+					dialog.setScene(new Scene((BorderPane)loader.load()));
+					EnhancedPlacementCourseGUIController controller = loader.<EnhancedPlacementCourseGUIController>getController();
+					controller.initializeCourse(newSelection.getFastSearch());
+					dialog.show();
+				} catch(Exception error) {
+					error.printStackTrace();
+					outputMessage(AlertType.ERROR, error.getMessage());
+				}
 		    }
 		});
 	}

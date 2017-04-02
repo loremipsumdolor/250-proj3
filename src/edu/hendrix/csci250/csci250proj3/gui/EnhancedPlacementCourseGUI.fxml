@@ -60,7 +60,7 @@
                         <HBox>
                            <children>
                               <Label text="Location: " />
-                              <Label fx:id="location" text="MCReynolds 317" />
+                              <Label fx:id="courseLocation" />
                            </children>
                         </HBox>
                      </children>
