@@ -24,9 +24,13 @@ public class EnhancedPlacementCourseGUIController {
 	@FXML HBox instructorHBox;
 	@FXML HBox collegeCodesHBox;
 	@FXML Button close;
+	@FXML Button addCourse;
+	@FXML HBox buttons;
 	
 	void initialize() {
+
 	}
+	
 	
 	@FXML
 	void close() {
@@ -36,6 +40,11 @@ public class EnhancedPlacementCourseGUIController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@FXML
+	void addCourse() {
+		outputMessage(AlertType.ERROR, "This has not been implemented");
 	}
 
 	public void initializeCourse(int fastSearch) {
@@ -66,6 +75,12 @@ public class EnhancedPlacementCourseGUIController {
 		courseLocation.setText(course.getBuilding() + " " + course.getRoom());
 		timeCode.setText(course.getPeriod());
 		courseDescription.setText(course.getDescription());
+
+	}
+	
+	private void outputMessage(AlertType alertType, String message) {
+		Alert alert = new Alert(alertType, message);
+		alert.showAndWait();
 	}
 	
 	private void showCode(String shortName) {
@@ -76,4 +91,6 @@ public class EnhancedPlacementCourseGUIController {
 		aboutBox.setContentText(ccCode.getDescription());
 		aboutBox.showAndWait();
 	}
+	
+	
 }

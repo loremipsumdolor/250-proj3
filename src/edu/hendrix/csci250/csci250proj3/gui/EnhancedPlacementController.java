@@ -68,6 +68,8 @@ public class EnhancedPlacementController {
 	        timeColumn.setPrefWidth(newColumnWidth);
 	        searchCodeColumn.setPrefWidth(newColumnWidth);
 		});
+
+
 		courseList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 		    if (newSelection != null) {
 		    	try {
