@@ -5,8 +5,7 @@ import java.util.Optional;
 
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -49,6 +48,10 @@ public class EnhancedPlacementController {
 
 	@FXML
 	private void initialize() {
+		exitMenuItem.setOnAction(event -> {
+			Platform.exit();
+			System.exit(0);
+		});
 		ArrayList<Course> courses = SQL.getAllCourses();
 		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
 		courseCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("courseCode"));
@@ -57,15 +60,13 @@ public class EnhancedPlacementController {
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
 		courseList.getItems().addAll(coursesToAdd);
-		courseList.widthProperty().addListener(new ChangeListener<Number>() {
-		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-		        double newColumnWidth = newSceneWidth.doubleValue() / 5;
-		        courseCodeColumn.setPrefWidth(newColumnWidth);
-		        courseTitleColumn.setPrefWidth(newColumnWidth);
-		        professorColumn.setPrefWidth(newColumnWidth);
-		        timeColumn.setPrefWidth(newColumnWidth);
-		        searchCodeColumn.setPrefWidth(newColumnWidth);
-		    }
+		courseList.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+	        double newColumnWidth = newSceneWidth.doubleValue() / 5;
+	        courseCodeColumn.setPrefWidth(newColumnWidth);
+	        courseTitleColumn.setPrefWidth(newColumnWidth);
+	        professorColumn.setPrefWidth(newColumnWidth);
+	        timeColumn.setPrefWidth(newColumnWidth);
+	        searchCodeColumn.setPrefWidth(newColumnWidth);
 		});
 		courseList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 		    if (newSelection != null) {
@@ -108,6 +109,16 @@ public class EnhancedPlacementController {
 		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
 		    courseList.getItems().addAll(coursesToAdd);
 		}
+	}
+	
+	@FXML
+	private void advancedSearch() {
+		outputMessage(AlertType.ERROR, "Advanced searching has not been implemented.");
+	}
+	
+	@FXML
+	private void refreshCourses() {
+		outputMessage(AlertType.ERROR, "Refresh function has not been implemented.");
 	}
 	
 	private void outputMessage(AlertType alertType, String message) {
