@@ -13,7 +13,7 @@
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
    <top>
-      <Label fx:id="courseTitle" text="CSCI 250: Scalable Software" BorderPane.alignment="CENTER">
+      <Label fx:id="courseTitle" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -29,7 +29,7 @@
                         <HBox>
                            <children>
                               <Label text="Course Code: " />
-                              <Label fx:id="courseCode" text="CSCI 250 01" />
+                              <Label fx:id="courseCode" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" />
@@ -38,7 +38,7 @@
                         <HBox>
                            <children>
                               <Label text="Fast Search: " />
-                              <Label fx:id="fastSearch" text="22428" />
+                              <Label fx:id="fastSearchCode" />
                            </children>
                         </HBox>
                      </children>
@@ -51,7 +51,6 @@
                         <HBox fx:id="instructorHBox">
                            <children>
                               <Label text="Instructors: " />
-                              <Label fx:id="instructor" text="Ferrer, Gabe" underline="true" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" />
@@ -73,7 +72,7 @@
                         <HBox>
                            <children>
                               <Label text="Time Code: " />
-                              <Label fx:id="timeCode" text="A4" />
+                              <Label fx:id="timeCode" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" />
@@ -82,7 +81,6 @@
                         <HBox fx:id="collegeCodesHBox">
                            <children>
                               <Label text="College Codes: " />
-                              <Label fx:id="collegeCodes" text="NS" underline="true" />
                            </children>
                         </HBox>
                      </children>
@@ -92,7 +90,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <Label fx:id="courseDescription" text="Introduction to the computer science concepts necessary for the development of large software systems. Further exploration of object-oriented development, testing, and version control techniques introduced in CSCI 151. Emphasis placed on user-centric interface design and writing precise requirements. Projects incorporate relevant technologies for modern software design, including network programming, databases, and mobile devices. Assignments emphasize the integration of multiple concepts in the context of developing realistic software applications. Students complete several projects in teams." wrapText="true">
+            <Label fx:id="courseDescription" wrapText="true">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>

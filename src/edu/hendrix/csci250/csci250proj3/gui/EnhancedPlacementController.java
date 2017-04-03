@@ -57,8 +57,7 @@ public class EnhancedPlacementController {
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
 		courseList.getItems().addAll(coursesToAdd);
-		// needs to be fixed yet
-		courseList.getScene().widthProperty().addListener(new ChangeListener<Number>() {
+		courseList.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 		        double newColumnWidth = newSceneWidth.doubleValue() / 5;
 		        courseCodeColumn.setPrefWidth(newColumnWidth);

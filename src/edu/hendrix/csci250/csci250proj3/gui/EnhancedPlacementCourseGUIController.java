@@ -3,6 +3,7 @@ package edu.hendrix.csci250.csci250proj3.gui;
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -12,11 +13,9 @@ public class EnhancedPlacementCourseGUIController {
 	
 	@FXML Label courseTitle;
 	@FXML Label courseCode;
-	@FXML Label instructor;
 	@FXML Label timeCode;
-	@FXML Label fastSearch;
+	@FXML Label fastSearchCode;
 	@FXML Label courseLocation;
-	@FXML Label collegeCodes;
 	@FXML Label courseDescription;
 	@FXML HBox instructorHBox;
 	@FXML HBox collegeCodesHBox;
@@ -39,19 +38,20 @@ public class EnhancedPlacementCourseGUIController {
 		Course course = SQL.getCourse(fastSearch);
 		courseTitle.setText(course.getTitle());
 		courseCode.setText(course.getCourseCode());
-		instructor.setText("");
-		for (String p: course.getInstructors()) {
+		fastSearchCode.setText(Integer.toString(fastSearch));
+		for (String p: course.getInstructorsArrayList()) {
 			Label profLabel = new Label();
 			profLabel.setText(p);
 			profLabel.setUnderline(true);
+			profLabel.setPadding(new Insets(0, 3, 0, 0));
 			//profLabel.setOnMouseClicked(event ->);
 			instructorHBox.getChildren().add(profLabel);
 		}
-		collegeCodes.setText("");
 		for (String c: course.getCollegeCodes()) {
 			Label codeLabel = new Label();
 			codeLabel.setText(c);
 			codeLabel.setUnderline(true);
+			codeLabel.setPadding(new Insets(0, 3, 0, 0));
 			//codeLabel.setOnMouseClocked(event ->);
 			collegeCodesHBox.getChildren().add(codeLabel);
 		}

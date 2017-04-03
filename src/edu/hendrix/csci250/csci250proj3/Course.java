@@ -74,9 +74,12 @@ public class Course {
 		return collegeCodes;
 	}
 
-	public ArrayList<String> getInstructors() {
-		return instructors;
+	public String getInstructors() {
+		return instructors.toString().replace("[", "").replace("]", "").trim();
 	}
 	
+	public ArrayList<String> getInstructorsArrayList() {
+		return instructors;
+	}
 	
 }
