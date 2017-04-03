@@ -80,6 +80,40 @@ public class SQL {
 		return courseData;
 	}
 	
+	public static ArrayList<Course> getCoursesBasicSearch(String searchTerm) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		ArrayList<Course> courseData = new ArrayList<Course>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses WHERE (title LIKE '%" + searchTerm + "%' or instructors LIKE '%" + searchTerm + "%' or description LIKE '%" + searchTerm + "%');" );
+			while ( rs.next() ) {
+				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
+				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
+				courseData.add(new Course(rs.getString("course_code"), rs.getString("semester"), 
+						rs.getString("subject_code"), rs.getString("course_number"), 
+						rs.getString("section_number"), Integer.parseInt(rs.getString("fast_search")),
+						rs.getString("title"), instructors, rs.getString("period"),
+						rs.getString("building"), rs.getString("room"), rs.getString("description"),
+						collegeCodes));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return courseData;
+	}
+	
 	public static CollegiateCenterCode getCode(String shortName) {
 		try {
 			Class.forName("org.sqlite.JDBC");

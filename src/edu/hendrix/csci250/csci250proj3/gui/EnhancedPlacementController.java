@@ -103,7 +103,10 @@ public class EnhancedPlacementController {
 		dialog.setContentText("Please enter a search term:");
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    // SQL Code Here
+		    ArrayList<Course> coursesFound = SQL.getCoursesBasicSearch(result.get());
+		    courseList.getItems().clear();
+		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
+		    courseList.getItems().addAll(coursesToAdd);
 		}
 	}
 	
