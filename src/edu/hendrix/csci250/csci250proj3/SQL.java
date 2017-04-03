@@ -79,4 +79,60 @@ public class SQL {
 		}
 		return courseData;
 	}
+	
+	public static CollegiateCenterCode getCode(String shortName) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		CollegiateCenterCode ccCode = null;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM collegiate_center_codes WHERE short_name IN ('" + shortName + "') LIMIT 1;" );
+			while ( rs.next() ) {
+				ccCode = new CollegiateCenterCode(rs.getString("short_name"), 
+						rs.getString("long_name"), rs.getString("description"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ccCode;
+	}
+	
+	public static ArrayList<CollegiateCenterCode> getAllCodes() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		ArrayList<CollegiateCenterCode> codeData = new ArrayList<CollegiateCenterCode>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses;" );
+			while ( rs.next() ) {
+				codeData.add(new CollegiateCenterCode(rs.getString("short_name"), 
+						rs.getString("long_name"), rs.getString("description")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return codeData;
+	}
 }
