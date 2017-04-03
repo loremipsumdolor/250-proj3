@@ -34,10 +34,6 @@ public class SQL {
 								collegeCodes);
 			}
 			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			stmt.close();
 			c.close();
 		} catch (SQLException e) {
@@ -68,10 +64,6 @@ public class SQL {
 						collegeCodes));
 			}
 			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			stmt.close();
 			c.close();
 		} catch (SQLException e) {
@@ -102,10 +94,6 @@ public class SQL {
 						collegeCodes));
 			}
 			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			stmt.close();
 			c.close();
 		} catch (SQLException e) {
@@ -130,10 +118,6 @@ public class SQL {
 						rs.getString("long_name"), rs.getString("description"));
 			}
 			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			stmt.close();
 			c.close();
 		} catch (SQLException e) {
@@ -158,15 +142,57 @@ public class SQL {
 						rs.getString("long_name"), rs.getString("description")));
 			}
 			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			stmt.close();
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return codeData;
+	}
+	
+	public static TimeCode getTimeCode(String code) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		TimeCode timeCode = null;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM time_codes WHERE code IN ('" + code + "') LIMIT 1;" );
+			while ( rs.next() ) {
+				timeCode = new TimeCode(rs.getString("code"), rs.getString("description"));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return timeCode;
+	}
+	
+	public static ArrayList<TimeCode> getAllTimeCodes() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		ArrayList<TimeCode> timeCodeData = new ArrayList<TimeCode>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM time_codes;" );
+			while ( rs.next() ) {
+				timeCodeData.add(new TimeCode(rs.getString("code"), rs.getString("description")));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return timeCodeData;
 	}
 }

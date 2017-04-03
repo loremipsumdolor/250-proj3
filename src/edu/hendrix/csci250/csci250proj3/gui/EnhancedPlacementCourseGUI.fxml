@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minWidth="-Infinity" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.hendrix.csci250.csci250proj3.gui.EnhancedPlacementCourseGUIController">
+<BorderPane minWidth="-Infinity" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.hendrix.csci250.csci250proj3.gui.EnhancedPlacementCourseGUIController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
@@ -77,7 +73,10 @@
                         <HBox>
                            <children>
                               <Label text="Time Code: " />
-                              <Label fx:id="timeCode" />
+                              <Label fx:id="timeCode" underline="true">
+                                 <tooltip>
+                                    <Tooltip fx:id="timeCodeTooltip" />
+                                 </tooltip></Label>
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" />
@@ -104,10 +103,12 @@
       </VBox>
    </center>
    <bottom>
-      <HBox fx:id="buttons" BorderPane.alignment="CENTER">
+      <HBox fx:id="buttons" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="close" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="100.0" text="Close" />
-            <HBox prefHeight="27.0" prefWidth="18.0" />
+            <Button fx:id="close" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="100.0" text="Close">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin></Button>
             <Button fx:id="addCourse" mnemonicParsing="false" onAction="#addCourse" prefHeight="20.0" prefWidth="100.0" text="Add Course" />
          </children>
       </HBox>
