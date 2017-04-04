@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 public class Professor {
 	
-	private String name, office, email, phone, picture;
+	private String name, title, office, email, phone, picture;
 	private ArrayList<Course> coursesTeaching;
 	
-	public Professor(String name, String office, String email, String phone, String picture) {
+	public Professor(String name, String title, String office, String email, String phone, String picture) {
 		this.name = name;
+		this.title = title;
 		this.office = office;
 		this.email = email;
 		this.phone = phone;
@@ -22,6 +23,10 @@ public class Professor {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	public String getOffice() {
