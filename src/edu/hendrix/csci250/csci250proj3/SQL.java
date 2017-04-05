@@ -23,7 +23,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses WHERE fast_search IN ('" + fastSearchCode + "') LIMIT 1;" );
-			while ( rs.next() ) {
+			if (rs.next()) {
 				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
 				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
 				courseData = new Course(rs.getString("course_code"), rs.getString("semester"), 
@@ -53,7 +53,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses;" );
-			while ( rs.next() ) {
+			while (rs.next()) {
 				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
 				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
 				courseData.add(new Course(rs.getString("course_code"), rs.getString("semester"), 
@@ -83,7 +83,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses WHERE (title LIKE '%" + searchTerm + "%' or instructors LIKE '%" + searchTerm + "%' or description LIKE '%" + searchTerm + "%');" );
-			while ( rs.next() ) {
+			while (rs.next()) {
 				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
 				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
 				courseData.add(new Course(rs.getString("course_code"), rs.getString("semester"), 
@@ -113,7 +113,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM collegiate_center_codes WHERE short_name IN ('" + shortName + "') LIMIT 1;" );
-			while ( rs.next() ) {
+			if (rs.next()) {
 				ccCode = new CollegiateCenterCode(rs.getString("short_name"), 
 						rs.getString("long_name"), rs.getString("description"));
 			}
@@ -137,7 +137,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM courses;" );
-			while ( rs.next() ) {
+			while (rs.next()) {
 				codeData.add(new CollegiateCenterCode(rs.getString("short_name"), 
 						rs.getString("long_name"), rs.getString("description")));
 			}
@@ -161,7 +161,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM time_codes WHERE code IN ('" + code + "') LIMIT 1;" );
-			while ( rs.next() ) {
+			if (rs.next()) {
 				timeCode = new TimeCode(rs.getString("code"), rs.getString("description"));
 			}
 			rs.close();
@@ -184,7 +184,7 @@ public class SQL {
 		try {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM time_codes;" );
-			while ( rs.next() ) {
+			while (rs.next()) {
 				timeCodeData.add(new TimeCode(rs.getString("code"), rs.getString("description")));
 			}
 			rs.close();
