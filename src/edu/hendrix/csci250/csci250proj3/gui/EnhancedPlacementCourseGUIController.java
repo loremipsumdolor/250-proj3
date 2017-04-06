@@ -50,36 +50,41 @@ public class EnhancedPlacementCourseGUIController {
 
 	public void initializeCourse(int fastSearch) {
 		Course course = SQL.getCourse(fastSearch);
-		TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
-		courseTitle.setText(course.getTitle());
-		courseCode.setText(course.getCourseCode());
-		fastSearchCode.setText(Integer.toString(fastSearch));
-		for (String p: course.getInstructorsArrayList()) {
-			Label profLabel = new Label();
-			profLabel.setText(p);
-			profLabel.setUnderline(true);
-			profLabel.setPadding(new Insets(0, 3, 0, 0));
-			//profLabel.setOnMouseClicked(event ->);
-			instructorHBox.getChildren().add(profLabel);
-		}
-		for (String c: course.getCollegeCodes()) {
-			if (!c.equals(" ")) {
-				Label codeLabel = new Label();
-				codeLabel.setText(c);
-				codeLabel.setUnderline(true);
-				codeLabel.setPadding(new Insets(0, 3, 0, 0));
-				codeLabel.setOnMouseClicked(event -> showCode(((Label)event.getSource()).getText()));
-				codeLabel.setOnMouseEntered(event -> codeLabel.getScene().setCursor(Cursor.HAND));
-				codeLabel.setOnMouseExited(event -> codeLabel.getScene().setCursor(Cursor.DEFAULT));
-				collegeCodesHBox.getChildren().add(codeLabel);
+		if (course != null) {
+			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
+			courseTitle.setText(course.getTitle());
+			courseCode.setText(course.getCourseCode());
+			fastSearchCode.setText(Integer.toString(fastSearch));
+			for (String p: course.getInstructorsArrayList()) {
+				Label profLabel = new Label();
+				profLabel.setText(p);
+				profLabel.setUnderline(true);
+				profLabel.setPadding(new Insets(0, 3, 0, 0));
+				//profLabel.setOnMouseClicked(event ->);
+				instructorHBox.getChildren().add(profLabel);
 			}
+			for (String c: course.getCollegeCodes()) {
+				if (!c.equals(" ")) {
+					Label codeLabel = new Label();
+					codeLabel.setText(c);
+					codeLabel.setUnderline(true);
+					codeLabel.setPadding(new Insets(0, 3, 0, 0));
+					codeLabel.setOnMouseClicked(event -> showCode(((Label)event.getSource()).getText()));
+					codeLabel.setOnMouseEntered(event -> codeLabel.getScene().setCursor(Cursor.HAND));
+					codeLabel.setOnMouseExited(event -> codeLabel.getScene().setCursor(Cursor.DEFAULT));
+					collegeCodesHBox.getChildren().add(codeLabel);
+				}
+			}
+			courseLocation.setText(course.getBuilding() + " " + course.getRoom());
+			timeCode.setText(course.getPeriod());
+			timeCode.setOnMouseEntered(event -> timeCode.getScene().setCursor(Cursor.HAND));
+			timeCode.setOnMouseExited(event -> timeCode.getScene().setCursor(Cursor.DEFAULT));
+			timeCodeTooltip.setText(timeCodeData.getDescription());
+			courseDescription.setText(course.getDescription());
+		} else {
+			outputMessage(AlertType.ERROR, "Invalid course selection.");
+			close();
 		}
-		courseLocation.setText(course.getBuilding() + " " + course.getRoom());
-		timeCode.setText(course.getPeriod());
-		timeCode.setOnMouseEntered(event -> timeCode.getScene().setCursor(Cursor.HAND));
-		timeCode.setOnMouseExited(event -> timeCode.getScene().setCursor(Cursor.DEFAULT));
-		timeCodeTooltip.setText(timeCodeData.getDescription());
-		courseDescription.setText(course.getDescription());
 
 	}
 	

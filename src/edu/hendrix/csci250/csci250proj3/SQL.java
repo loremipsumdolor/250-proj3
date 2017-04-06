@@ -102,6 +102,127 @@ public class SQL {
 		return courseData;
 	}
 	
+	public static ArrayList<Course> getCoursesAdvancedSearch(Course tempCourse) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		boolean addAnd = false;
+		ArrayList<Course> courseData = new ArrayList<Course>();
+		StringBuilder searchString = new StringBuilder();
+		if (tempCourse != null) {
+			searchString.append(" WHERE (");
+			if (!tempCourse.getSemester().equals("")) {
+				searchString.append("semester LIKE '%" + tempCourse.getSemester() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getSubjectCode() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("subject_code LIKE '%" + tempCourse.getSubjectCode() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getCourseCode() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("course_code LIKE '%" + tempCourse.getCourseCode() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!Integer.toString(tempCourse.getFastSearch()).equals("0")) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("fast_search LIKE '%" + Integer.toString(tempCourse.getFastSearch()) + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getTitle() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("title LIKE '%" + tempCourse.getTitle() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!tempCourse.getInstructorsArrayList().get(0).equals("")) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("instructors LIKE '%" + tempCourse.getInstructorsArrayList().get(0) + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getPeriod() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("period LIKE '%" + tempCourse.getPeriod() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getBuilding() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("building LIKE '%" + tempCourse.getBuilding() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getRoom() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("room LIKE '%" + tempCourse.getRoom() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getDescription() == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("description LIKE '%" + tempCourse.getDescription() + "%'");
+				addAnd = !addAnd;
+			}
+			if (!(tempCourse.getCollegeCodes().get(0) == null)) {
+				if (addAnd) {
+					searchString.append(" and ");
+					addAnd = !addAnd;
+				}
+				searchString.append("course_code LIKE '%" + tempCourse.getCollegeCodes().get(0) + "%'");
+				addAnd = !addAnd;
+			}
+			searchString.append(");");
+		}
+		try {
+			stmt = c.createStatement();
+			System.out.println(searchString.toString());
+			ResultSet rs = stmt.executeQuery("SELECT * FROM courses" + searchString.toString());
+			while (rs.next()) {
+				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
+				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
+				courseData.add(new Course(rs.getString("course_code"), rs.getString("semester"), 
+						rs.getString("subject_code"), rs.getString("course_number"), 
+						rs.getString("section_number"), Integer.parseInt(rs.getString("fast_search")),
+						rs.getString("title"), instructors, rs.getString("period"),
+						rs.getString("building"), rs.getString("room"), rs.getString("description"),
+						collegeCodes));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return courseData;
+	}
+	
 	public static CollegiateCenterCode getCode(String shortName) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -194,5 +315,51 @@ public class SQL {
 			e.printStackTrace();
 		}
 		return timeCodeData;
+	}
+
+	public static AcademicSubject getAcademicSubject(String shortName) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		AcademicSubject academicSubject = null;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM academic_subjects WHERE code IN ('" + shortName + "') LIMIT 1;");
+			if (rs.next()) {
+				academicSubject = new AcademicSubject(rs.getString("short_name"), rs.getString("long_name"));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return academicSubject;
+	}
+	
+	public static ArrayList<AcademicSubject> getAllAcademicSubjects() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		ArrayList<AcademicSubject> academicSubjectData = new ArrayList<AcademicSubject>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM academic_subjects;");
+			while (rs.next()) {
+				academicSubjectData.add(new AcademicSubject(rs.getString("short_name"), rs.getString("long_name")));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return academicSubjectData;
 	}
 }
