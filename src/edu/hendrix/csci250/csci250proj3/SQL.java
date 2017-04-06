@@ -126,12 +126,12 @@ public class SQL {
 				searchString.append("subject_code LIKE '%" + tempCourse.getSubjectCode() + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getCourseCode() == null)) {
+			if (!tempCourse.getCourseNumber().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
 				}
-				searchString.append("course_code LIKE '%" + tempCourse.getCourseCode() + "%'");
+				searchString.append("course_number LIKE '%" + tempCourse.getCourseNumber() + "%'");
 				addAnd = !addAnd;
 			}
 			if (!Integer.toString(tempCourse.getFastSearch()).equals("0")) {
@@ -142,7 +142,7 @@ public class SQL {
 				searchString.append("fast_search LIKE '%" + Integer.toString(tempCourse.getFastSearch()) + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getTitle() == null)) {
+			if (!tempCourse.getTitle().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
@@ -158,7 +158,7 @@ public class SQL {
 				searchString.append("instructors LIKE '%" + tempCourse.getInstructorsArrayList().get(0) + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getPeriod() == null)) {
+			if (!tempCourse.getPeriod().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
@@ -166,7 +166,7 @@ public class SQL {
 				searchString.append("period LIKE '%" + tempCourse.getPeriod() + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getBuilding() == null)) {
+			if (!tempCourse.getBuilding().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
@@ -174,7 +174,7 @@ public class SQL {
 				searchString.append("building LIKE '%" + tempCourse.getBuilding() + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getRoom() == null)) {
+			if (!tempCourse.getRoom().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
@@ -182,7 +182,7 @@ public class SQL {
 				searchString.append("room LIKE '%" + tempCourse.getRoom() + "%'");
 				addAnd = !addAnd;
 			}
-			if (!(tempCourse.getDescription() == null)) {
+			if (!tempCourse.getDescription().equals("")) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
@@ -195,7 +195,7 @@ public class SQL {
 					searchString.append(" and ");
 					addAnd = !addAnd;
 				}
-				searchString.append("course_code LIKE '%" + tempCourse.getCollegeCodes().get(0) + "%'");
+				searchString.append("college_codes LIKE '%" + tempCourse.getCollegeCodes().get(0) + "%'");
 				addAnd = !addAnd;
 			}
 			searchString.append(");");
