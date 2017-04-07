@@ -39,7 +39,12 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
 public class EnhancedPlacementController {
-	
+	@FXML
+	CheckMenuItem myScheduleMenuItem;
+	@FXML
+	MenuItem loadScheduleMenuItem;
+	@FXML
+	MenuItem saveScheduleMenuItem;
 	@FXML
 	MenuItem refreshMenuItem;
 	@FXML
@@ -50,8 +55,6 @@ public class EnhancedPlacementController {
 	MenuItem advancedSearchMenuItem;
 	@FXML
 	MenuItem aboutMenuItem;
-	@FXML
-	CheckMenuItem myScheduleMenuItem;
 	@FXML
 	HBox searchHBox;
 	@FXML
