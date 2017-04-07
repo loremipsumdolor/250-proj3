@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.hendrix.csci250.csci250proj3.gui.EnhancedPlacementController">
    <top>
@@ -40,30 +41,30 @@
         </menus>
       </MenuBar>
    </top>
-   <bottom>
-      <TableView fx:id="courseList" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="courseCodeColumn" editable="false" prefWidth="100.0" text="Course Code" />
-          <TableColumn fx:id="courseTitleColumn" editable="false" prefWidth="100.0" text="Course Title" />
-          <TableColumn fx:id="professorColumn" editable="false" prefWidth="100.0" text="Professor" />
-          <TableColumn fx:id="timeColumn" editable="false" prefWidth="100.0" text="Time" />
-          <TableColumn fx:id="searchCodeColumn" editable="false" prefWidth="100.0" text="Search Code" />
-        </columns>
-      </TableView>
-   </bottom>
    <center>
-      <HBox fx:id="searchHBox" alignment="CENTER_LEFT" prefHeight="30.0" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="searchLabel" />
-            <Pane HBox.hgrow="ALWAYS" />
-            <Button fx:id="clearSearchButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clearSearch" text="Clear" />
+            <HBox fx:id="searchHBox" alignment="CENTER_LEFT" maxHeight="30.0" prefHeight="30.0">
+               <children>
+                  <Label fx:id="searchLabel" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <Button fx:id="clearSearchButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clearSearch" text="Clear" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <TableView fx:id="courseList" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="courseCodeColumn" editable="false" prefWidth="100.0" text="Course Code" />
+                <TableColumn fx:id="semesterColumn" editable="false" maxWidth="60.0" prefWidth="60.0" resizable="false" text="Semester" />
+                <TableColumn fx:id="courseTitleColumn" editable="false" prefWidth="100.0" text="Course Title" />
+                <TableColumn fx:id="professorColumn" editable="false" prefWidth="100.0" text="Professor" />
+                <TableColumn fx:id="timeColumn" editable="false" prefWidth="100.0" text="Time" />
+                <TableColumn fx:id="searchCodeColumn" editable="false" prefWidth="100.0" text="Search Code" />
+              </columns>
+            </TableView>
          </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </HBox>
+      </VBox>
    </center>
 </BorderPane>

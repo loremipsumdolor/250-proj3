@@ -66,6 +66,8 @@ public class EnhancedPlacementController {
 	@FXML
 	TableColumn<Course, String> courseCodeColumn;
 	@FXML
+	TableColumn<Course, String> semesterColumn;
+	@FXML
 	TableColumn<Course, String> courseTitleColumn;
 	@FXML
 	TableColumn<Course, String> professorColumn;
@@ -88,12 +90,13 @@ public class EnhancedPlacementController {
 			System.exit(0);
 		});
 		courseCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("courseCode"));
+		semesterColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("semester"));
 		courseTitleColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("title"));
 		professorColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("instructors"));
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
 		courseList.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-	        double newColumnWidth = newSceneWidth.doubleValue() / 5;
+	        double newColumnWidth = (newSceneWidth.doubleValue() - 60) / 5;
 	        courseCodeColumn.setPrefWidth(newColumnWidth);
 	        courseTitleColumn.setPrefWidth(newColumnWidth);
 	        professorColumn.setPrefWidth(newColumnWidth);
@@ -274,6 +277,10 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(searchButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
+			if (myScheduleMenuItem.isSelected()) {
+				myScheduleMenuItem.setSelected(false);
+				showSchedule();
+			}
 			searchString = result.get();
 			searchHBox.setVisible(true);
 			searchLabel.setText("Basic Search: " + searchString);
