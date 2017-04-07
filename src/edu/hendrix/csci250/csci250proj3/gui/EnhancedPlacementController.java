@@ -31,6 +31,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 
@@ -98,6 +99,7 @@ public class EnhancedPlacementController {
 					dialog.setScene(new Scene((BorderPane)loader.load()));
 					EnhancedPlacementCourseGUIController controller = loader.<EnhancedPlacementCourseGUIController>getController();
 					controller.initializeCourse(newSelection.getFastSearch());
+					dialog.setOnHiding(event -> {showSchedule();}); 
 					dialog.show();
 				} catch(Exception error) {
 					error.printStackTrace();
@@ -114,6 +116,32 @@ public class EnhancedPlacementController {
 		courseList.getItems().addAll(coursesToAdd);
 	}
 	
+	private void loadSchedule() {
+		ArrayList<String> choices = new ArrayList<>(SQL.getSavedScheduleNames());
+		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+		dialog.setTitle("Load Schedule");
+		dialog.setHeaderText("Load Schedule");
+		dialog.setContentText("Select a Name:");
+		ButtonType loadButtonType = new ButtonType("Load", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().clear();
+		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    ArrayList<Integer> loadedCourseSearch = SQL.getSavedSchedule(result.get());
+		    ArrayList<Course> loadedCourses = new ArrayList<Course>();
+		    for (Integer i : loadedCourseSearch) {
+			    loadedCourses.add(SQL.getCourse(i));
+		    }
+		    for (Course c : loadedCourses) {
+		    	schedule.addCourse(c);
+		    }
+		    courseList.getItems().clear();
+		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(loadedCourses);
+		    courseList.getItems().addAll(coursesToAdd);
+		    myScheduleMenuItem.setSelected(true);
+		}
+	}
+	
 	@FXML
 	private void aboutDialog() {
 		Alert aboutBox = new Alert(AlertType.INFORMATION);
@@ -125,9 +153,14 @@ public class EnhancedPlacementController {
 	
 	@FXML
 	private void showSchedule() {
-		ArrayList<Course> courses = schedule.getCourses();
-		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
-		courseList.getItems().addAll(coursesToAdd);
+		courseList.getItems().clear();
+		if (myScheduleMenuItem.isSelected()) {
+			ArrayList<Course> courses = schedule.getCourses();
+			ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+			courseList.getItems().addAll(coursesToAdd);
+		} else {
+			showAllCourses();
+		}
 	}
 	
 	@FXML

@@ -8,10 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
+import java.util.Iterator;
 
 public class Schedule implements Serializable{
 	
@@ -19,7 +16,7 @@ public class Schedule implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	ArrayList<Course> schedule = new ArrayList<>(5);
+	ArrayList<Course> schedule = new ArrayList<>();
 	public static final String ScheduleFile = "scheduleFile.txt";
 	private final static Schedule instance = new Schedule();
 	
@@ -27,12 +24,61 @@ public class Schedule implements Serializable{
 		return instance;
 	}
 	
-	public void addCourse(Course course) {
+	public void addCourse(Course course) throws Exception {
+		int firstSemCourses = 0;
+		int secondSemCourses = 0;
+		
+		if (schedule.contains(course)) {
+			throw new Exception("Course already in schedule");
+		}
+		
+		
+		for (Course c : schedule) {
+			if (c.getSemester().equals("1S")) {
+				if (course.getPeriod().equals(c.getPeriod())) {
+					throw new Exception("You already have a class in this time slot");
+				}
+				firstSemCourses++;
+			} else {
+				if (course.getPeriod().equals(c.getPeriod())) {
+					throw new Exception("You already have a class in this time slot");
+				}
+				secondSemCourses++;
+			}
+		}
+		System.out.println(Integer.toString(firstSemCourses));
+		System.out.println(Integer.toString(secondSemCourses));
+		
+		if (firstSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
+			throw new Exception("Your first semester schedule is full, but you may add a PA credit");
+		}
+		
+		if (secondSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
+			throw new Exception("Your second semester schedule is full, but you may add a PA credit");
+		}
+		
+		if (firstSemCourses > 4) {
+			throw new Exception("Your first semester schedule is full");
+		}
+		
+		if (secondSemCourses > 4) {
+			throw new Exception("Your second semester schedule is full");
+		}
+		
 		schedule.add(course);
 	}
 	
-	public void removeCourse(Course course) {
-		schedule.remove(course);
+	public int getLength() {
+		return schedule.size();
+	}
+	
+	public void removeCourse(int fastSearch) {
+		Iterator<Course> iter = schedule.iterator();
+		while (iter.hasNext()) {
+		    Course c = iter.next();
+		    if (c.getFastSearch() == fastSearch)
+		        iter.remove();
+		}
 	}
 	
 	public String getCourse(int index) {
@@ -40,7 +86,12 @@ public class Schedule implements Serializable{
 	}
 	
 	public boolean containsCourse(Course course) {
-		return schedule.contains(course);
+		for (Course c : schedule) {
+			if (Integer.toString(c.getFastSearch()).equals(Integer.toString(course.getFastSearch()))) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public ArrayList<Course> getCourses() {
@@ -59,7 +110,6 @@ public class Schedule implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
 	
 	public static Schedule loadSchedule() {
 		if (fileExists()) {
@@ -80,10 +130,5 @@ public class Schedule implements Serializable{
 	
 	private static boolean fileExists() {
 		return new File(ScheduleFile).isFile();
-	}
-	
-	private void outputMessage(AlertType alertType, String message) {
-		Alert alert = new Alert(alertType, message);
-		alert.showAndWait();
 	}
 }

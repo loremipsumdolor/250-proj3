@@ -50,11 +50,19 @@ public class EnhancedPlacementCourseGUIController {
 	
 	@FXML
 	void addCourse() {
-		if (schedule.containsCourse(course)) {
-			outputMessage(AlertType.ERROR, "Course is already on Schedule");
+		if (addCourse.getText().equals("Remove Course")) {
+			schedule.removeCourse(course.getFastSearch());
+			outputMessage(AlertType.INFORMATION, "Course has been removed from your schedule");
+			addCourse.setText("Add Course");
 		} else {
-			schedule.addCourse(course);
-			outputMessage(AlertType.CONFIRMATION, "Course has been added to your schedule");
+			try {
+				schedule.addCourse(course);
+				outputMessage(AlertType.INFORMATION, "Course has been added to your schedule");
+				addCourse.setText("Remove Course");
+				addCourse.setPrefWidth(125);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
+			}
 		}
 	}
 
@@ -83,12 +91,18 @@ public class EnhancedPlacementCourseGUIController {
 					codeLabel.setOnMouseExited(event -> codeLabel.getScene().setCursor(Cursor.DEFAULT));
 					collegeCodesHBox.getChildren().add(codeLabel);
 				}
+			}
 			courseLocation.setText(course.getBuilding() + " " + course.getRoom());
 			timeCode.setText(course.getPeriod());
 			timeCode.setOnMouseEntered(event -> timeCode.getScene().setCursor(Cursor.HAND));
 			timeCode.setOnMouseExited(event -> timeCode.getScene().setCursor(Cursor.DEFAULT));
-			timeCodeTooltip.setText(timeCodeData.getDescription());
+			if (timeCodeData != null) {
+				timeCodeTooltip.setText(timeCodeData.getDescription());
+			}
 			courseDescription.setText(course.getDescription());
+			if (schedule.containsCourse(course)) {
+				addCourse.setText("Remove Course");
+				addCourse.setPrefWidth(125);
 			}
 		} else {
 			outputMessage(AlertType.ERROR, "Invalid course selection.");
