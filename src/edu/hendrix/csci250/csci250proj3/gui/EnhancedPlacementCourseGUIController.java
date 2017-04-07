@@ -21,6 +21,7 @@ public class EnhancedPlacementCourseGUIController {
 	
 	@FXML Label courseTitle;
 	@FXML Label courseCode;
+	@FXML Label semester;
 	@FXML Label timeCode;
 	@FXML Tooltip timeCodeTooltip;
 	@FXML Label fastSearchCode;
@@ -72,6 +73,7 @@ public class EnhancedPlacementCourseGUIController {
 			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
 			courseTitle.setText(course.getTitle());
 			courseCode.setText(course.getCourseCode());
+			semester.setText(course.getSemester());
 			fastSearchCode.setText(Integer.toString(fastSearch));
 			for (String p: course.getInstructorsArrayList()) {
 				Label profLabel = new Label();

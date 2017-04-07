@@ -73,6 +73,11 @@
                         <HBox>
                            <children>
                               <Label text="Time Code: " />
+                              <Label fx:id="semester">
+                                 <padding>
+                                    <Insets right="3.0" />
+                                 </padding>
+                              </Label>
                               <Label fx:id="timeCode" underline="true">
                                  <tooltip>
                                     <Tooltip fx:id="timeCodeTooltip" />
