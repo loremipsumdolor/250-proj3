@@ -3,7 +3,6 @@ package edu.hendrix.csci250.csci250proj3;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +11,13 @@ public class SQL {
 	private static Connection c;
 	private static Statement stmt;
 	
-	public static Course getCourse(int fastSearchCode) {
+	public static Course getCourse(int fastSearchCode) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		Course courseData = null;
 		try {
@@ -36,18 +36,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve course with ID " + Integer.toString(fastSearchCode) + ".");
 		}
 		return courseData;
 	}
 	
-	public static ArrayList<Course> getAllCourses() {
+	public static ArrayList<Course> getAllCourses() throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<Course> courseData = new ArrayList<Course>();
 		try {
@@ -66,18 +68,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve courses.");
 		}
 		return courseData;
 	}
 	
-	public static ArrayList<Course> getCoursesBasicSearch(String searchTerm) {
+	public static ArrayList<Course> getCoursesBasicSearch(String searchTerm) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<Course> courseData = new ArrayList<Course>();
 		try {
@@ -96,18 +100,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("No courses found.");
 		}
 		return courseData;
 	}
 	
-	public static ArrayList<Course> getCoursesAdvancedSearch(Course tempCourse) {
+	public static ArrayList<Course> getCoursesAdvancedSearch(Course tempCourse) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		boolean addAnd = false;
 		ArrayList<Course> courseData = new ArrayList<Course>();
@@ -202,7 +208,6 @@ public class SQL {
 		}
 		try {
 			stmt = c.createStatement();
-			System.out.println(searchString.toString());
 			ResultSet rs = stmt.executeQuery("SELECT * FROM courses" + searchString.toString());
 			while (rs.next()) {
 				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
@@ -217,18 +222,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("No courses found.");
 		}
 		return courseData;
 	}
 	
-	public static CollegiateCenterCode getCode(String shortName) {
+	public static CollegiateCenterCode getCode(String shortName) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		CollegiateCenterCode ccCode = null;
 		try {
@@ -241,18 +248,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve Collegiate Center Code " + shortName + ".");
 		}
 		return ccCode;
 	}
 	
-	public static ArrayList<CollegiateCenterCode> getAllCodes() {
+	public static ArrayList<CollegiateCenterCode> getAllCodes() throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<CollegiateCenterCode> codeData = new ArrayList<CollegiateCenterCode>();
 		try {
@@ -265,18 +274,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve Collegiate Center Codes.");
 		}
 		return codeData;
 	}
 	
-	public static TimeCode getTimeCode(String code) {
+	public static TimeCode getTimeCode(String code) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		TimeCode timeCode = null;
 		try {
@@ -288,18 +299,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve time code " + code + ".");
 		}
 		return timeCode;
 	}
 	
-	public static ArrayList<TimeCode> getAllTimeCodes() {
+	public static ArrayList<TimeCode> getAllTimeCodes() throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<TimeCode> timeCodeData = new ArrayList<TimeCode>();
 		try {
@@ -311,18 +324,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve time codes.");
 		}
 		return timeCodeData;
 	}
 
-	public static AcademicSubject getAcademicSubject(String shortName) {
+	public static AcademicSubject getAcademicSubject(String shortName) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		AcademicSubject academicSubject = null;
 		try {
@@ -334,18 +349,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve academic subject " + shortName + ".");
 		}
 		return academicSubject;
 	}
 	
-	public static ArrayList<AcademicSubject> getAllAcademicSubjects() {
+	public static ArrayList<AcademicSubject> getAllAcademicSubjects() throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<AcademicSubject> academicSubjectData = new ArrayList<AcademicSubject>();
 		try {
@@ -357,18 +374,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve academic subjects.");
 		}
 		return academicSubjectData;
 	}
 
-	public static ArrayList<String> getScheduleNames() {
+	public static ArrayList<String> getScheduleNames() throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		ArrayList<String> scheduleNames = new ArrayList<String>();
 		try {
@@ -380,18 +399,20 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not retrieve schedule names.");
 		}
 		return scheduleNames;
 	}
 	
-	public static int[] getSchedule(String name) {
+	public static int[] getSchedule(String name) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		int[] scheduleCodes = null;
 		try {
@@ -403,35 +424,39 @@ public class SQL {
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Schedule not found.");
 		}
 		return scheduleCodes;
 	}
 	
-	public static void saveSchedule(String name, int[] codes) {
+	public static void saveSchedule(String name, int[] codes) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
 		try {
 			stmt = c.createStatement();
 			stmt.executeUpdate("INSERT INTO saved_schedules (name,codes) VALUES (" + name + ", '" + codes.toString() + "' );");
 			stmt.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not save schedule.");
 		}
 	}
 	
-	public static void deleteSchedule(String name) {
+	public static void deleteSchedule(String name) throws Exception {
 		try {
 			stmt = c.createStatement();
 			stmt.executeUpdate("DELETE FROM saved_schedules WHERE name IN ('" + name + "');");
 			stmt.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("Could not delete schedule.");
 		}
 	}
 }

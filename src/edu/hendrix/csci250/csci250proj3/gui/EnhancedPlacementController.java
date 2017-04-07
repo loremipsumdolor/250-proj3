@@ -24,10 +24,11 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
-
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
@@ -52,6 +53,12 @@ public class EnhancedPlacementController {
 	@FXML
 	CheckMenuItem myScheduleMenuItem;
 	@FXML
+	HBox searchHBox;
+	@FXML
+	Label searchLabel;
+	@FXML
+	Button clearSearchButton;
+	@FXML
 	TableView<Course> courseList;
 	@FXML
 	TableColumn<Course, String> courseCodeColumn;
@@ -65,22 +72,23 @@ public class EnhancedPlacementController {
 	TableColumn<Course, Integer> searchCodeColumn;
 	
 	Schedule schedule;
+	Course tempCourse;
+	String searchString;
 
 	@FXML
 	private void initialize() {
+		searchHBox.managedProperty().bind(searchHBox.visibleProperty());
+		searchHBox.setVisible(false);
 		schedule = Schedule.getSchedule();
 		exitMenuItem.setOnAction(event -> {
 			Platform.exit();
 			System.exit(0);
 		});
-		ArrayList<Course> courses = SQL.getAllCourses();
-		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
 		courseCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("courseCode"));
 		courseTitleColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("title"));
 		professorColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("instructors"));
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Course, String>("period"));
 		searchCodeColumn.setCellValueFactory(new PropertyValueFactory<Course, Integer>("fastSearch"));
-		courseList.getItems().addAll(coursesToAdd);
 		courseList.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
 	        double newColumnWidth = newSceneWidth.doubleValue() / 5;
 	        courseCodeColumn.setPrefWidth(newColumnWidth);
@@ -89,6 +97,15 @@ public class EnhancedPlacementController {
 	        timeColumn.setPrefWidth(newColumnWidth);
 	        searchCodeColumn.setPrefWidth(newColumnWidth);
 		});
+		try {
+			ArrayList<Course> courses = SQL.getAllCourses();
+			ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+			courseList.getItems().addAll(coursesToAdd);
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
+			Platform.exit();
+			System.exit(0);
+		}
 		courseList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 		    if (newSelection != null) {
 		    	try {
@@ -110,15 +127,53 @@ public class EnhancedPlacementController {
 	}
 	
 	@FXML
+	private void clearSearch() {
+		searchString = "";
+		tempCourse = null;
+		searchHBox.setVisible(false);
+		showAllCourses();
+	}
+	
+	@FXML
 	private void showAllCourses() {
-		ArrayList<Course> courses = SQL.getAllCourses();
-		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
-		courseList.getItems().addAll(coursesToAdd);
+		if (tempCourse == null && searchString.equals("")) {
+			try {
+				courseList.getItems().clear();
+				ArrayList<Course> courses = SQL.getAllCourses();
+				ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+				courseList.getItems().addAll(coursesToAdd);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
+			}
+		} else {
+			ArrayList<Course> coursesFound = null;
+			if (!searchString.equals("")) {
+				try {
+					coursesFound = SQL.getCoursesBasicSearch(searchString);
+				} catch (Exception e) {
+					outputMessage(AlertType.ERROR, e.getMessage());
+				}
+			} else if (!(tempCourse == null)) {
+				try {
+					coursesFound = SQL.getCoursesAdvancedSearch(tempCourse);
+				} catch (Exception e) {
+					outputMessage(AlertType.ERROR, e.getMessage());
+				}
+			}
+			courseList.getItems().clear();
+		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
+		    courseList.getItems().addAll(coursesToAdd);
+		}
 	}
 	
 	@FXML
 	private void loadSchedule() {
-		ArrayList<String> choices = new ArrayList<>(SQL.getScheduleNames());
+		ArrayList<String> choices = null;
+		try {
+			 choices = new ArrayList<>(SQL.getScheduleNames());
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
+		}
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
 		dialog.setTitle("Load Schedule");
 		dialog.setHeaderText("Load Schedule");
@@ -128,22 +183,26 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    int[] loadedCourseSearch = SQL.getSchedule(result.get());
-		    ArrayList<Course> loadedCourses = new ArrayList<Course>();
-		    for (int i : loadedCourseSearch) {
-			    loadedCourses.add(SQL.getCourse(i));
-		    }
-		    for (Course c : loadedCourses) {
-		    	try {
-					schedule.addCourse(c);
-				} catch (Exception e) {
-					outputMessage(AlertType.ERROR, e.getMessage());
-				}
-		    }
-		    courseList.getItems().clear();
-		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(loadedCourses);
-		    courseList.getItems().addAll(coursesToAdd);
-		    myScheduleMenuItem.setSelected(true);
+			try {
+				int[] loadedCourseSearch = SQL.getSchedule(result.get());
+			    ArrayList<Course> loadedCourses = new ArrayList<Course>();
+			    for (int i : loadedCourseSearch) {
+				    loadedCourses.add(SQL.getCourse(i));
+			    }
+			    for (Course c : loadedCourses) {
+			    	try {
+						schedule.addCourse(c);
+					} catch (Exception e) {
+						outputMessage(AlertType.ERROR, e.getMessage());
+					}
+			    }
+			    courseList.getItems().clear();
+			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(loadedCourses);
+			    courseList.getItems().addAll(coursesToAdd);
+			    myScheduleMenuItem.setSelected(true);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
+			}
 		}
 	}
 	
@@ -162,18 +221,20 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 		Optional<String> nameResult = dialog.showAndWait();
 		if (nameResult.isPresent()){
-			if (!(SQL.getSchedule(nameResult.get()) == null)) {
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Confirm Overwrite");
-				alert.setHeaderText("Overwrite Confirmation");
-				alert.setContentText("Name already exists. Overwrite?");
-				Optional<ButtonType> confirmResult = alert.showAndWait();
-				if (confirmResult.get() == ButtonType.OK) {
-					SQL.deleteSchedule(nameResult.get());
-					SQL.saveSchedule(nameResult.get(), courseCodes);
+			try {
+				if (!(SQL.getSchedule(nameResult.get()) == null)) {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Confirm Overwrite");
+					alert.setHeaderText("Overwrite Confirmation");
+					alert.setContentText("Name already exists. Overwrite?");
+					Optional<ButtonType> confirmResult = alert.showAndWait();
+					if (confirmResult.get() == ButtonType.OK) {
+						SQL.deleteSchedule(nameResult.get());
+					}
 				}
-			} else {
 				SQL.saveSchedule(nameResult.get(), courseCodes);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
 			}
 		}
 	}
@@ -210,10 +271,17 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(searchButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    ArrayList<Course> coursesFound = SQL.getCoursesBasicSearch(result.get());
-		    courseList.getItems().clear();
-		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
-		    courseList.getItems().addAll(coursesToAdd);
+			searchString = result.get();
+			searchHBox.setVisible(true);
+			searchLabel.setText("Basic Search: " + searchString);
+			try {
+				ArrayList<Course> coursesFound = SQL.getCoursesBasicSearch(searchString);
+			    courseList.getItems().clear();
+			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
+			    courseList.getItems().addAll(coursesToAdd);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
+			}
 		}
 	}
 	
@@ -228,9 +296,13 @@ public class EnhancedPlacementController {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		ComboBox<String> subjects = new ComboBox<String>();
-		ArrayList<AcademicSubject> subjectsListing = SQL.getAllAcademicSubjects();
-		for (AcademicSubject s : subjectsListing) {
-			subjects.getItems().add(s.getShortName());
+		try {
+			ArrayList<AcademicSubject> subjectsListing = SQL.getAllAcademicSubjects();
+			for (AcademicSubject s : subjectsListing) {
+				subjects.getItems().add(s.getShortName());
+			}
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		TextField courseNumber = new TextField();
 		TextField semester = new TextField();
@@ -242,9 +314,13 @@ public class EnhancedPlacementController {
 		TextField room = new TextField();
 		TextField description = new TextField();
 		ComboBox<String> collegeCodes = new ComboBox<String>();
-		ArrayList<CollegiateCenterCode> collegeCodesListing = SQL.getAllCodes();
-		for (CollegiateCenterCode c : collegeCodesListing) {
-			collegeCodes.getItems().add(c.getShortName());
+		try {
+			ArrayList<CollegiateCenterCode> collegeCodesListing = SQL.getAllCodes();
+			for (CollegiateCenterCode c : collegeCodesListing) {
+				collegeCodes.getItems().add(c.getShortName());
+			}
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		grid.add(new Label("Subject:"), 0, 0);
 		grid.add(subjects, 1, 0);
@@ -284,10 +360,18 @@ public class EnhancedPlacementController {
 		});
 		Optional<Course> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    ArrayList<Course> coursesFound = SQL.getCoursesAdvancedSearch(result.get());
-		    courseList.getItems().clear();
-		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
-		    courseList.getItems().addAll(coursesToAdd);
+			tempCourse = result.get();
+			searchHBox.setVisible(true);
+			searchLabel.setText("Advanced Search");
+			try {
+				ArrayList<Course> coursesFound = SQL.getCoursesAdvancedSearch(result.get());
+			    courseList.getItems().clear();
+			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
+			    courseList.getItems().addAll(coursesToAdd);
+			} catch (Exception e) {
+				outputMessage(AlertType.ERROR, e.getMessage());
+				courseList.getItems().clear();
+			}
 		}
 	}
 	

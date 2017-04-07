@@ -68,8 +68,8 @@ public class EnhancedPlacementCourseGUIController {
 	}
 
 	public void initializeCourse(int fastSearch) {		
-		course = SQL.getCourse(fastSearch);
-		if (course != null) {
+		try {
+			course = SQL.getCourse(fastSearch);
 			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
 			courseTitle.setText(course.getTitle());
 			courseCode.setText(course.getCourseCode());
@@ -106,8 +106,8 @@ public class EnhancedPlacementCourseGUIController {
 				addCourse.setText("Remove Course");
 				addCourse.setPrefWidth(125);
 			}
-		} else {
-			outputMessage(AlertType.ERROR, "Invalid course selection.");
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
 			close();
 		}
 	}
@@ -118,11 +118,15 @@ public class EnhancedPlacementCourseGUIController {
 	}
 	
 	private void showCode(String shortName) {
-		CollegiateCenterCode ccCode = SQL.getCode(shortName);
-		Alert aboutBox = new Alert(AlertType.INFORMATION);
-		aboutBox.setTitle(ccCode.getLongName());
-		aboutBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
-		aboutBox.setContentText(ccCode.getDescription());
-		aboutBox.showAndWait();
+		try {
+			CollegiateCenterCode ccCode = SQL.getCode(shortName);
+			Alert aboutBox = new Alert(AlertType.INFORMATION);
+			aboutBox.setTitle(ccCode.getLongName());
+			aboutBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
+			aboutBox.setContentText(ccCode.getDescription());
+			aboutBox.showAndWait();
+		} catch (Exception e) {
+			outputMessage(AlertType.ERROR, e.getMessage());
+		}
 	}
 }

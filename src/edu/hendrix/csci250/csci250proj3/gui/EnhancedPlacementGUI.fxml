@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.hendrix.csci250.csci250proj3.gui.EnhancedPlacementController">
    <top>
@@ -33,7 +38,7 @@
         </menus>
       </MenuBar>
    </top>
-   <center>
+   <bottom>
       <TableView fx:id="courseList" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="courseCodeColumn" editable="false" prefWidth="100.0" text="Course Code" />
@@ -43,5 +48,20 @@
           <TableColumn fx:id="searchCodeColumn" editable="false" prefWidth="100.0" text="Search Code" />
         </columns>
       </TableView>
+   </bottom>
+   <center>
+      <HBox fx:id="searchHBox" alignment="CENTER_LEFT" prefHeight="30.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="searchLabel" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="clearSearchButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#clearSearch" text="Clear" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
    </center>
 </BorderPane>
