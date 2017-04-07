@@ -72,8 +72,8 @@ public class EnhancedPlacementController {
 	TableColumn<Course, Integer> searchCodeColumn;
 	
 	Schedule schedule;
-	Course tempCourse;
-	String searchString;
+	Course tempCourse = null;
+	String searchString = "";
 
 	@FXML
 	private void initialize() {
