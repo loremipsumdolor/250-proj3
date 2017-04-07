@@ -116,29 +116,65 @@ public class EnhancedPlacementController {
 		courseList.getItems().addAll(coursesToAdd);
 	}
 	
+	@FXML
 	private void loadSchedule() {
-		ArrayList<String> choices = new ArrayList<>(SQL.getSavedScheduleNames());
+		ArrayList<String> choices = new ArrayList<>(SQL.getScheduleNames());
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
 		dialog.setTitle("Load Schedule");
 		dialog.setHeaderText("Load Schedule");
-		dialog.setContentText("Select a Name:");
+		dialog.setContentText("Select a name:");
 		ButtonType loadButtonType = new ButtonType("Load", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().clear();
 		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    ArrayList<Integer> loadedCourseSearch = SQL.getSavedSchedule(result.get());
+		    int[] loadedCourseSearch = SQL.getSchedule(result.get());
 		    ArrayList<Course> loadedCourses = new ArrayList<Course>();
-		    for (Integer i : loadedCourseSearch) {
+		    for (int i : loadedCourseSearch) {
 			    loadedCourses.add(SQL.getCourse(i));
 		    }
 		    for (Course c : loadedCourses) {
-		    	schedule.addCourse(c);
+		    	try {
+					schedule.addCourse(c);
+				} catch (Exception e) {
+					outputMessage(AlertType.ERROR, e.getMessage());
+				}
 		    }
 		    courseList.getItems().clear();
 		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(loadedCourses);
 		    courseList.getItems().addAll(coursesToAdd);
 		    myScheduleMenuItem.setSelected(true);
+		}
+	}
+	
+	@FXML
+	private void saveSchedule() {
+		int[] courseCodes = new int[schedule.getLength()];
+		for (int i = 0; i < schedule.getLength(); i++) {
+		    courseCodes[i] = schedule.getCourse(i).getFastSearch();
+		}
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Save Schedule");
+		dialog.setHeaderText("Save Schedule");
+		dialog.setContentText("Enter a name:");
+		ButtonType saveButtonType = new ButtonType("Save", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().clear();
+		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+		Optional<String> nameResult = dialog.showAndWait();
+		if (nameResult.isPresent()){
+			if (!(SQL.getSchedule(nameResult.get()) == null)) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Confirm Overwrite");
+				alert.setHeaderText("Overwrite Confirmation");
+				alert.setContentText("Name already exists. Overwrite?");
+				Optional<ButtonType> confirmResult = alert.showAndWait();
+				if (confirmResult.get() == ButtonType.OK) {
+					SQL.deleteSchedule(nameResult.get());
+					SQL.saveSchedule(nameResult.get(), courseCodes);
+				}
+			} else {
+				SQL.saveSchedule(nameResult.get(), courseCodes);
+			}
 		}
 	}
 	

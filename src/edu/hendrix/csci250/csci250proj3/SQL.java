@@ -362,4 +362,76 @@ public class SQL {
 		}
 		return academicSubjectData;
 	}
+
+	public static ArrayList<String> getScheduleNames() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		ArrayList<String> scheduleNames = new ArrayList<String>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM saved_schedules;");
+			while (rs.next()) {
+				scheduleNames.add(rs.getString("name"));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return scheduleNames;
+	}
+	
+	public static int[] getSchedule(String name) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		int[] scheduleCodes = null;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM saved_schedules WHERE code IN ('" + name + "') LIMIT 1;");
+			if (rs.next()) {
+				scheduleCodes = Arrays.asList(rs.getString("codes").split(", ")).stream().mapToInt(Integer::parseInt).toArray();
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return scheduleCodes;
+	}
+	
+	public static void saveSchedule(String name, int[] codes) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		try {
+			stmt = c.createStatement();
+			stmt.executeUpdate("INSERT INTO saved_schedules (name,codes) VALUES (" + name + ", '" + codes.toString() + "' );");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteSchedule(String name) {
+		try {
+			stmt = c.createStatement();
+			stmt.executeUpdate("DELETE FROM saved_schedules WHERE name IN ('" + name + "');");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
