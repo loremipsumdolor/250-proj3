@@ -8,6 +8,7 @@ import edu.hendrix.csci250.csci250proj3.AcademicSubject;
 import edu.hendrix.csci250.csci250proj3.CollegiateCenterCode;
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
+import edu.hendrix.csci250.csci250proj3.Schedule;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,13 +27,16 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
+
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
+
 import javafx.scene.control.Label;
 
 public class EnhancedPlacementController {
+	
 	@FXML
 	MenuItem refreshMenuItem;
 	@FXML
@@ -43,6 +47,8 @@ public class EnhancedPlacementController {
 	MenuItem advancedSearchMenuItem;
 	@FXML
 	MenuItem aboutMenuItem;
+	@FXML
+	MenuItem myScheduleMenuItem;
 	@FXML
 	TableView<Course> courseList;
 	@FXML
@@ -55,9 +61,21 @@ public class EnhancedPlacementController {
 	TableColumn<Course, String> timeColumn;
 	@FXML
 	TableColumn<Course, Integer> searchCodeColumn;
+	@FXML
+	Label course1;
+	@FXML
+	Label course2;
+	@FXML
+	Label course3;
+	@FXML
+	Label course4;
+	
+	Schedule schedule;
 
 	@FXML
 	private void initialize() {
+		schedule = Schedule.getSchedule();
+		
 		exitMenuItem.setOnAction(event -> {
 			Platform.exit();
 			System.exit(0);
@@ -95,7 +113,9 @@ public class EnhancedPlacementController {
 				}
 		    }
 		});
+		
 	}
+	
 	
 	@FXML
 	private void aboutDialog() {
@@ -104,6 +124,15 @@ public class EnhancedPlacementController {
 		aboutBox.setHeaderText("About Enhanced Placement");
 		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq");
 		aboutBox.showAndWait();
+	}
+	
+	@FXML
+	private void showScheduleDialog() {
+		Alert showSchedule = new Alert(AlertType.INFORMATION);
+		showSchedule.setTitle("My Schedule");
+		showSchedule.setHeaderText("My Schedule");
+		showSchedule.setContentText(schedule.getCourses());
+		showSchedule.showAndWait();	
 	}
 	
 	@FXML

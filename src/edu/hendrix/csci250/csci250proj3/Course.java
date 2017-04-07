@@ -1,9 +1,14 @@
 package edu.hendrix.csci250.csci250proj3;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course {
+public class Course implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String courseCode, semester, subjectCode, courseNumber, sectionNumber, title, period, building, room, description;
 	private int fastSearch;
 	private ArrayList<String> collegeCodes, instructors;

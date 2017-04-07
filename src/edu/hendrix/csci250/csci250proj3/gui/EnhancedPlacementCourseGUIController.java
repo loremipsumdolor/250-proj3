@@ -3,6 +3,7 @@ package edu.hendrix.csci250.csci250proj3.gui;
 import edu.hendrix.csci250.csci250proj3.CollegiateCenterCode;
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
+import edu.hendrix.csci250.csci250proj3.Schedule;
 import edu.hendrix.csci250.csci250proj3.TimeCode;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -14,6 +15,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+
 
 public class EnhancedPlacementCourseGUIController {
 	
@@ -29,8 +31,11 @@ public class EnhancedPlacementCourseGUIController {
 	@FXML Button close;
 	@FXML Button addCourse;
 	@FXML HBox buttons;
+	Course course;
+	Schedule schedule;
 	
-	void initialize() {
+	public void initialize() {
+		schedule = Schedule.getSchedule();
 	}
 	
 	@FXML
@@ -45,11 +50,16 @@ public class EnhancedPlacementCourseGUIController {
 	
 	@FXML
 	void addCourse() {
-		outputMessage(AlertType.ERROR, "This has not been implemented");
+		if (schedule.containsCourse(course)) {
+			outputMessage(AlertType.ERROR, "Course is already on Schedule");
+		} else {
+			schedule.addCourse(course);
+			outputMessage(AlertType.CONFIRMATION, "Course has been added to your schedule");
+		}
 	}
 
-	public void initializeCourse(int fastSearch) {
-		Course course = SQL.getCourse(fastSearch);
+	public void initializeCourse(int fastSearch) {		
+		course = SQL.getCourse(fastSearch);
 		if (course != null) {
 			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
 			courseTitle.setText(course.getTitle());
@@ -60,7 +70,6 @@ public class EnhancedPlacementCourseGUIController {
 				profLabel.setText(p);
 				profLabel.setUnderline(true);
 				profLabel.setPadding(new Insets(0, 3, 0, 0));
-				//profLabel.setOnMouseClicked(event ->);
 				instructorHBox.getChildren().add(profLabel);
 			}
 			for (String c: course.getCollegeCodes()) {
@@ -74,18 +83,17 @@ public class EnhancedPlacementCourseGUIController {
 					codeLabel.setOnMouseExited(event -> codeLabel.getScene().setCursor(Cursor.DEFAULT));
 					collegeCodesHBox.getChildren().add(codeLabel);
 				}
-			}
 			courseLocation.setText(course.getBuilding() + " " + course.getRoom());
 			timeCode.setText(course.getPeriod());
 			timeCode.setOnMouseEntered(event -> timeCode.getScene().setCursor(Cursor.HAND));
 			timeCode.setOnMouseExited(event -> timeCode.getScene().setCursor(Cursor.DEFAULT));
 			timeCodeTooltip.setText(timeCodeData.getDescription());
 			courseDescription.setText(course.getDescription());
+			}
 		} else {
 			outputMessage(AlertType.ERROR, "Invalid course selection.");
 			close();
 		}
-
 	}
 	
 	private void outputMessage(AlertType alertType, String message) {
@@ -101,6 +109,4 @@ public class EnhancedPlacementCourseGUIController {
 		aboutBox.setContentText(ccCode.getDescription());
 		aboutBox.showAndWait();
 	}
-	
-	
 }
