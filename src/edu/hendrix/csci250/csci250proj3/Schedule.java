@@ -43,12 +43,8 @@ public class Schedule implements Serializable{
 		return schedule.contains(course);
 	}
 	
-	public String getCourses() {
-		String courses = "";
-		for (Course c : schedule) {
-			courses += c.getTitle() + "\n";
-		}
-		return courses;
+	public ArrayList<Course> getCourses() {
+		return schedule;
 	}
 	
 	public static void saveSchedule(Schedule schedule) {

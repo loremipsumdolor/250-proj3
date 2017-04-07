@@ -30,6 +30,7 @@ import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 
@@ -48,7 +49,7 @@ public class EnhancedPlacementController {
 	@FXML
 	MenuItem aboutMenuItem;
 	@FXML
-	MenuItem myScheduleMenuItem;
+	CheckMenuItem myScheduleMenuItem;
 	@FXML
 	TableView<Course> courseList;
 	@FXML
@@ -61,21 +62,12 @@ public class EnhancedPlacementController {
 	TableColumn<Course, String> timeColumn;
 	@FXML
 	TableColumn<Course, Integer> searchCodeColumn;
-	@FXML
-	Label course1;
-	@FXML
-	Label course2;
-	@FXML
-	Label course3;
-	@FXML
-	Label course4;
 	
 	Schedule schedule;
 
 	@FXML
 	private void initialize() {
 		schedule = Schedule.getSchedule();
-		
 		exitMenuItem.setOnAction(event -> {
 			Platform.exit();
 			System.exit(0);
@@ -113,9 +105,14 @@ public class EnhancedPlacementController {
 				}
 		    }
 		});
-		
 	}
 	
+	@FXML
+	private void showAllCourses() {
+		ArrayList<Course> courses = SQL.getAllCourses();
+		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+		courseList.getItems().addAll(coursesToAdd);
+	}
 	
 	@FXML
 	private void aboutDialog() {
@@ -127,12 +124,10 @@ public class EnhancedPlacementController {
 	}
 	
 	@FXML
-	private void showScheduleDialog() {
-		Alert showSchedule = new Alert(AlertType.INFORMATION);
-		showSchedule.setTitle("My Schedule");
-		showSchedule.setHeaderText("My Schedule");
-		showSchedule.setContentText(schedule.getCourses());
-		showSchedule.showAndWait();	
+	private void showSchedule() {
+		ArrayList<Course> courses = schedule.getCourses();
+		ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+		courseList.getItems().addAll(coursesToAdd);
 	}
 	
 	@FXML
