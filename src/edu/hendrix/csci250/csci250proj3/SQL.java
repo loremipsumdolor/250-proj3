@@ -2,6 +2,7 @@ package edu.hendrix.csci250.csci250proj3;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -73,6 +74,58 @@ public class SQL {
 			throw new Exception("Could not retrieve courses.");
 		}
 		return courseData;
+	}
+	
+	public static void addCourses(ArrayList<Course> courses) throws Exception {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
+		}
+		try {
+			PreparedStatement pstmt = c.prepareStatement("INSERT INTO courses (course_code,semester,subject_code,course_number,section_number,fast_search,title,instructors,period,building,room,description,college_codes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
+			for (Course course : courses) {
+				pstmt.setString(1, course.getCourseCode());
+				pstmt.setString(2, course.getSemester());
+				pstmt.setString(3, course.getSubjectCode());
+				pstmt.setString(4, course.getCourseNumber());
+				pstmt.setString(5, course.getSectionNumber());
+				pstmt.setInt(6, course.getFastSearch());
+				pstmt.setString(7, course.getTitle());
+				pstmt.setString(8, course.getInstructorsArrayList().toString());
+				pstmt.setString(9, course.getPeriod());
+				pstmt.setString(10, course.getBuilding());
+				pstmt.setString(11, course.getRoom());
+				pstmt.setString(12, course.getDescription());
+				pstmt.setString(13, course.getCollegeCodes().toString());
+				pstmt.executeUpdate();
+			}
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Could not save schedule.");
+		}
+	}
+	
+	public static void deleteAllCourses() throws Exception {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
+		}
+		try {
+			stmt = c.createStatement();
+			stmt.executeQuery("DELETE FROM courses;");
+			stmt.close();
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("No courses found.");
+		}
 	}
 	
 	public static ArrayList<Course> getCoursesBasicSearch(String searchTerm) throws Exception {
