@@ -30,7 +30,7 @@ public class Refresher {
 			JsonArray professorArray = item.asObject().get("Instructors").asArray();
 			ArrayList<String> instructors = new ArrayList<String>();
 			for (JsonValue p : professorArray) {
-				String professorName = p.asObject().getString("FirstName", null) + " " + p.asObject().getString("LastName", null);
+				String professorName = p.asObject().getString("LastName", null) + ", " + p.asObject().getString("FirstName", null);
 				instructors.add(professorName);
 			}
 			String period = item.asObject().getString("Period", null);

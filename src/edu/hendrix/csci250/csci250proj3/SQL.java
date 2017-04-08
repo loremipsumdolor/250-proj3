@@ -94,7 +94,7 @@ public class SQL {
 				pstmt.setString(5, course.getSectionNumber());
 				pstmt.setInt(6, course.getFastSearch());
 				pstmt.setString(7, course.getTitle());
-				pstmt.setString(8, course.getInstructorsArrayList().toString());
+				pstmt.setString(8, course.getInstructorsArrayList().toString().replaceAll("\",\"", "\";\""));
 				pstmt.setString(9, course.getPeriod());
 				pstmt.setString(10, course.getBuilding());
 				pstmt.setString(11, course.getRoom());
