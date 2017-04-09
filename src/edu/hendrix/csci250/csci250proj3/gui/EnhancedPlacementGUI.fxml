@@ -60,6 +60,9 @@
                </padding>
             </HBox>
             <TableView fx:id="courseList" VBox.vgrow="ALWAYS">
+              <placeholder>
+                <Label text="No courses to display"/>
+              </placeholder>
               <columns>
                 <TableColumn fx:id="courseCodeColumn" editable="false" prefWidth="100.0" text="Course Code" />
                 <TableColumn fx:id="semesterColumn" editable="false" maxWidth="60.0" prefWidth="60.0" resizable="false" text="Semester" />
