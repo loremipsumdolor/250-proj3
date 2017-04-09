@@ -76,6 +76,8 @@ public class EnhancedPlacementCourseGUIController {
 			course = SQL.getCourse(fastSearch);
 			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
 			courseTitle.setText(course.getTitle());
+			Stage stage = (Stage)close.getScene().getWindow();
+			stage.setTitle(courseTitle.getText());
 			courseCode.setText(course.getCourseCode());
 			semester.setText(course.getSemester());
 			fastSearchCode.setText(Integer.toString(fastSearch));

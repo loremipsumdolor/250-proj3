@@ -66,6 +66,8 @@ public class EnhancedPlacementProfessorGUIController {
 	
 	public void initializeProfessor(String name) {		
 		try {
+			Stage stage = (Stage)closeButton.getScene().getWindow();
+			stage.setTitle(name);
 			professor = SQL.getProfessor(name);
 			ArrayList<Course> professorCourses = SQL.getProfessorCourses(name);
 			for (Course c : professorCourses) {
@@ -84,7 +86,9 @@ public class EnhancedPlacementProfessorGUIController {
 			phoneNumber.setOnMouseClicked(event -> openPhone(((Label)event.getSource()).getText()));
 			phoneNumber.setOnMouseEntered(event -> email.getScene().setCursor(Cursor.HAND));
 			phoneNumber.setOnMouseExited(event -> email.getScene().setCursor(Cursor.DEFAULT));
-			professorImage.setImage(new Image(professor.getPicture()));
+			try {
+				professorImage.setImage(new Image(professor.getPicture()));
+			} catch (Exception e) {}
 		} catch (Exception e) {
 			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
