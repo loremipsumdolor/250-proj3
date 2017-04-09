@@ -21,16 +21,16 @@ public class Schedule implements Serializable{
 			throw new Exception("Course already in schedule.");
 		}
 		for (Course c : schedule) {
-			if (c.getSemester().equals("1S")) {
+			if (c.getSemester().equals(course.getSemester())) {
 				if (course.getPeriod().equals(c.getPeriod())) {
 					throw new Exception("You already have a class in this time slot.");
 				}
-				firstSemCourses++;
 			} else {
-				if (course.getPeriod().equals(c.getPeriod())) {
-					throw new Exception("You already have a class in this time slot.");
+				if (c.getSemester().equals("1S")) {
+					firstSemCourses++;
+				} else {
+					secondSemCourses++;
 				}
-				secondSemCourses++;
 			}
 		}
 		if (firstSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
@@ -58,10 +58,6 @@ public class Schedule implements Serializable{
 		}
 	}
 	
-	public Course getCourse(int index) {
-		return schedule.get(index);
-	}
-	
 	public boolean containsCourse(Course course) {
 		for (Course c : schedule) {
 			if (Integer.toString(c.getFastSearch()).equals(Integer.toString(course.getFastSearch()))) {
@@ -73,5 +69,9 @@ public class Schedule implements Serializable{
 	
 	public ArrayList<Course> getCourses() {
 		return schedule;
+	}
+	
+	public void clear() {
+		schedule = new ArrayList<>();
 	}
 }

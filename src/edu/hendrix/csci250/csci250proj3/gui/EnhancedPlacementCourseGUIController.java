@@ -56,12 +56,12 @@ public class EnhancedPlacementCourseGUIController {
 	void addCourse() {
 		if (addCourse.getText().equals("Remove Course")) {
 			schedule.removeCourse(course.getFastSearch());
-			outputMessage(AlertType.INFORMATION, "Course has been removed from your schedule");
+			outputMessage(AlertType.INFORMATION, "Course has been removed from your schedule.");
 			addCourse.setText("Add Course");
 		} else {
 			try {
 				schedule.addCourse(course);
-				outputMessage(AlertType.INFORMATION, "Course has been added to your schedule");
+				outputMessage(AlertType.INFORMATION, "Course has been added to your schedule.");
 				addCourse.setText("Remove Course");
 				addCourse.setPrefWidth(125);
 			} catch (Exception e) {

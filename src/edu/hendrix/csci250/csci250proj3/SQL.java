@@ -519,7 +519,7 @@ public class SQL {
 		return scheduleNames;
 	}
 	
-	public static int[] getSchedule(String name) throws Exception {
+	public static ArrayList<Integer> getSchedule(String name) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
@@ -527,12 +527,15 @@ public class SQL {
 			e.printStackTrace();
 			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
 		}
-		int[] scheduleCodes = null;
+		ArrayList<Integer> courseCodes = new ArrayList<Integer>();
 		try {
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM saved_schedules WHERE code IN ('" + name + "') LIMIT 1;");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM saved_schedules WHERE name IN ('" + name + "') LIMIT 1;");
 			if (rs.next()) {
-				scheduleCodes = Arrays.asList(rs.getString("codes").split(", ")).stream().mapToInt(Integer::parseInt).toArray();
+				ArrayList<String> scheduleCodesStringAL = new ArrayList<String>(Arrays.asList(rs.getString("codes").split(",")));
+				for(String courseCode : scheduleCodesStringAL){
+					courseCodes.add(Integer.parseInt(courseCode.trim()));
+				}
 			}
 			rs.close();
 			stmt.close();
@@ -541,10 +544,10 @@ public class SQL {
 			e.printStackTrace();
 			throw new Exception("Schedule not found.");
 		}
-		return scheduleCodes;
+		return courseCodes;
 	}
 	
-	public static void saveSchedule(String name, int[] codes) throws Exception {
+	public static void saveSchedule(String name, String codes) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
@@ -554,7 +557,7 @@ public class SQL {
 		}
 		try {
 			stmt = c.createStatement();
-			stmt.executeUpdate("INSERT INTO saved_schedules (name,codes) VALUES (" + name + ", '" + codes.toString() + "' );");
+			stmt.executeUpdate("INSERT INTO saved_schedules (name,codes) VALUES ('" + name + "', '" + codes + "' );");
 			stmt.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -564,8 +567,16 @@ public class SQL {
 	
 	public static void deleteSchedule(String name) throws Exception {
 		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
+		}
+		try {
 			stmt = c.createStatement();
 			stmt.executeUpdate("DELETE FROM saved_schedules WHERE name IN ('" + name + "');");
+			stmt.executeUpdate("VACUUM;");
 			stmt.close();
 		} catch (Exception e) {
 			e.printStackTrace();

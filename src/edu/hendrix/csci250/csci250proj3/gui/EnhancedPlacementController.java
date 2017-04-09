@@ -209,8 +209,9 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
+			schedule.clear();
 			try {
-				int[] loadedCourseSearch = SQL.getSchedule(result.get());
+				ArrayList<Integer> loadedCourseSearch = SQL.getSchedule(result.get());
 			    ArrayList<Course> loadedCourses = new ArrayList<Course>();
 			    for (int i : loadedCourseSearch) {
 				    loadedCourses.add(SQL.getCourse(i));
@@ -234,9 +235,9 @@ public class EnhancedPlacementController {
 	
 	@FXML
 	private void saveSchedule() {
-		int[] courseCodes = new int[schedule.getLength()];
-		for (int i = 0; i < schedule.getLength(); i++) {
-		    courseCodes[i] = schedule.getCourse(i).getFastSearch();
+		ArrayList<Integer> courseCodes = new ArrayList<Integer>();
+		for (Course c : schedule.getCourses()) {
+		    courseCodes.add(c.getFastSearch());
 		}
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Save Schedule");
@@ -248,7 +249,7 @@ public class EnhancedPlacementController {
 		Optional<String> nameResult = dialog.showAndWait();
 		if (nameResult.isPresent()){
 			try {
-				if (!(SQL.getSchedule(nameResult.get()) == null)) {
+				if (SQL.getScheduleNames().contains(nameResult.get())) {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Confirm Overwrite");
 					alert.setHeaderText("Overwrite Confirmation");
@@ -258,7 +259,7 @@ public class EnhancedPlacementController {
 						SQL.deleteSchedule(nameResult.get());
 					}
 				}
-				SQL.saveSchedule(nameResult.get(), courseCodes);
+				SQL.saveSchedule(nameResult.get(), courseCodes.toString().replace("[", "").replace("]", "").trim());
 			} catch (Exception e) {
 				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
