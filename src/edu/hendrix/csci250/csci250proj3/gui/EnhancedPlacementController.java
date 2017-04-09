@@ -26,6 +26,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -143,6 +145,7 @@ public class EnhancedPlacementController {
 					dialog.initOwner(courseList.getScene().getWindow());
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("EnhancedPlacementCourseGUI.fxml"));
 					dialog.setScene(new Scene((BorderPane)loader.load()));
+					dialog.getIcons().add(new Image("file:ep-icon.png"));
 					EnhancedPlacementCourseGUIController controller = loader.<EnhancedPlacementCourseGUIController>getController();
 					controller.initializeCourse(newSelection.getFastSearch());
 					dialog.setOnHiding(event -> {showSchedule();}); 
@@ -308,9 +311,14 @@ public class EnhancedPlacementController {
 	@FXML
 	private void aboutDialog() {
 		Alert aboutBox = new Alert(AlertType.INFORMATION);
+		aboutBox.initOwner((Stage)courseList.getScene().getWindow());
 		aboutBox.setTitle("About Enhanced Placement");
 		aboutBox.setHeaderText("About Enhanced Placement");
-		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq");
+		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq\n\nCheck Mark by jeff from the Noun Project");
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		aboutBox.setGraphic(graphic);
 		aboutBox.showAndWait();
 	}
 	
@@ -476,6 +484,7 @@ public class EnhancedPlacementController {
 	
 	private void outputMessage(AlertType alertType, String message) {
 		Alert alert = new Alert(alertType, message);
+		alert.initOwner((Stage)courseList.getScene().getWindow());
 		alert.showAndWait();
 	}
 }

@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -71,7 +72,7 @@ public class EnhancedPlacementCourseGUIController {
 		}
 	}
 
-	public void initializeCourse(int fastSearch) {		
+	public void initializeCourse(int fastSearch) {
 		try {
 			course = SQL.getCourse(fastSearch);
 			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
@@ -124,6 +125,7 @@ public class EnhancedPlacementCourseGUIController {
 	
 	private void outputMessage(AlertType alertType, String message) {
 		Alert alert = new Alert(alertType, message);
+		alert.initOwner((Stage)close.getScene().getWindow());
 		alert.showAndWait();
 	}
 	
@@ -152,6 +154,7 @@ public class EnhancedPlacementCourseGUIController {
 			dialog.initOwner(close.getScene().getWindow());
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("EnhancedPlacementProfessorGUI.fxml"));
 			dialog.setScene(new Scene((BorderPane)loader.load()));
+			dialog.getIcons().add(new Image("file:ep-icon.png"));
 			EnhancedPlacementProfessorGUIController controller = loader.<EnhancedPlacementProfessorGUIController>getController();
 			controller.initializeProfessor(name); 
 			dialog.show();

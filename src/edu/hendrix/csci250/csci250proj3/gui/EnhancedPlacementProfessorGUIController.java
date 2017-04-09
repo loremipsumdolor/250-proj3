@@ -43,6 +43,7 @@ public class EnhancedPlacementProfessorGUIController {
 					dialog.initOwner(coursesOffered.getScene().getWindow());
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("EnhancedPlacementCourseGUI.fxml"));
 					dialog.setScene(new Scene((BorderPane)loader.load()));
+					dialog.getIcons().add(new Image("file:ep-icon.png"));
 					EnhancedPlacementCourseGUIController controller = loader.<EnhancedPlacementCourseGUIController>getController();
 					controller.initializeCourse(professor.getCourseInList(newSelection)); 
 					dialog.show();
@@ -98,6 +99,7 @@ public class EnhancedPlacementProfessorGUIController {
 	
 	private void outputMessage(AlertType alertType, String message) {
 		Alert alert = new Alert(alertType, message);
+		alert.initOwner((Stage)professorName.getScene().getWindow());
 		alert.showAndWait();
 	}
 	
