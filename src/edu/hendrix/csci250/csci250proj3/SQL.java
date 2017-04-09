@@ -94,12 +94,12 @@ public class SQL {
 				pstmt.setString(5, course.getSectionNumber());
 				pstmt.setInt(6, course.getFastSearch());
 				pstmt.setString(7, course.getTitle());
-				pstmt.setString(8, course.getInstructorsArrayList().toString().replaceAll("\",\"", "\";\""));
+				pstmt.setString(8, course.getInstructorsArrayList().toString().replaceAll("\",\"", "\";\"").replace("[", "").replace("]", ""));
 				pstmt.setString(9, course.getPeriod());
 				pstmt.setString(10, course.getBuilding());
 				pstmt.setString(11, course.getRoom());
 				pstmt.setString(12, course.getDescription());
-				pstmt.setString(13, course.getCollegeCodes().toString());
+				pstmt.setString(13, course.getCollegeCodes().toString().replace("[", "").replace("]", ""));
 				pstmt.executeUpdate();
 			}
 			pstmt.close();
@@ -119,7 +119,8 @@ public class SQL {
 		}
 		try {
 			stmt = c.createStatement();
-			stmt.executeQuery("DELETE FROM courses;");
+			stmt.executeUpdate("DELETE FROM courses;");
+			stmt.executeUpdate("VACUUM;");
 			stmt.close();
 			c.close();
 		} catch (Exception e) {

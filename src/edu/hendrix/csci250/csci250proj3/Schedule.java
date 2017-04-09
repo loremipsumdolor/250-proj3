@@ -18,29 +18,29 @@ public class Schedule implements Serializable{
 		int firstSemCourses = 0;
 		int secondSemCourses = 0;
 		if (schedule.contains(course)) {
-			throw new Exception("Course already in schedule");
+			throw new Exception("Course already in schedule.");
 		}
 		for (Course c : schedule) {
 			if (c.getSemester().equals("1S")) {
 				if (course.getPeriod().equals(c.getPeriod())) {
-					throw new Exception("You already have a class in this time slot");
+					throw new Exception("You already have a class in this time slot.");
 				}
 				firstSemCourses++;
 			} else {
 				if (course.getPeriod().equals(c.getPeriod())) {
-					throw new Exception("You already have a class in this time slot");
+					throw new Exception("You already have a class in this time slot.");
 				}
 				secondSemCourses++;
 			}
 		}
 		if (firstSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
-			throw new Exception("Your first semester schedule is full, but you may add a PA credit");
+			throw new Exception("Your first semester schedule is full, but you may add a PA credit.");
 		} else if (secondSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
-			throw new Exception("Your second semester schedule is full, but you may add a PA credit");
+			throw new Exception("Your second semester schedule is full, but you may add a PA credit.");
 		} else if (firstSemCourses > 4) {
-			throw new Exception("Your first semester schedule is full");
+			throw new Exception("Your first semester schedule is full.");
 		} else if (secondSemCourses > 4) {
-			throw new Exception("Your second semester schedule is full");
+			throw new Exception("Your second semester schedule is full.");
 		}
 		schedule.add(course);
 	}

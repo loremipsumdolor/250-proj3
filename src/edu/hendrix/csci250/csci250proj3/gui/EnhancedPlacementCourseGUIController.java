@@ -62,6 +62,7 @@ public class EnhancedPlacementCourseGUIController {
 				addCourse.setText("Remove Course");
 				addCourse.setPrefWidth(125);
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
 			}
 		}
@@ -83,7 +84,7 @@ public class EnhancedPlacementCourseGUIController {
 				instructorHBox.getChildren().add(profLabel);
 			}
 			for (String c: course.getCollegeCodes()) {
-				if (!c.equals(" ")) {
+				if (!c.equals(" ") && !c.equals("")) {
 					Label codeLabel = new Label();
 					codeLabel.setText(c);
 					codeLabel.setUnderline(true);
@@ -107,6 +108,7 @@ public class EnhancedPlacementCourseGUIController {
 				addCourse.setPrefWidth(125);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 			close();
 		}
@@ -120,12 +122,17 @@ public class EnhancedPlacementCourseGUIController {
 	private void showCode(String shortName) {
 		try {
 			CollegiateCenterCode ccCode = SQL.getCode(shortName);
-			Alert aboutBox = new Alert(AlertType.INFORMATION);
-			aboutBox.setTitle(ccCode.getLongName());
-			aboutBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
-			aboutBox.setContentText(ccCode.getDescription());
-			aboutBox.showAndWait();
+			if (ccCode != null) {
+				Alert aboutBox = new Alert(AlertType.INFORMATION);
+				aboutBox.setTitle(ccCode.getLongName());
+				aboutBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
+				aboutBox.setContentText(ccCode.getDescription());
+				aboutBox.showAndWait();
+			} else {
+				outputMessage(AlertType.ERROR, "Code not found.");
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 	}

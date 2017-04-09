@@ -7,8 +7,12 @@ import java.util.Optional;
 import edu.hendrix.csci250.csci250proj3.AcademicSubject;
 import edu.hendrix.csci250.csci250proj3.CollegiateCenterCode;
 import edu.hendrix.csci250.csci250proj3.Course;
+import edu.hendrix.csci250.csci250proj3.FileOps;
+import edu.hendrix.csci250.csci250proj3.Refresher;
 import edu.hendrix.csci250.csci250proj3.SQL;
 import edu.hendrix.csci250.csci250proj3.Schedule;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +31,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -35,7 +40,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
-
 import javafx.scene.control.Label;
 
 public class EnhancedPlacementController {
@@ -46,7 +50,7 @@ public class EnhancedPlacementController {
 	@FXML
 	MenuItem saveScheduleMenuItem;
 	@FXML
-	MenuItem refreshMenuItem;
+	MenuItem updateDBMenuItem;
 	@FXML
 	MenuItem exitMenuItem;
 	@FXML
@@ -82,6 +86,24 @@ public class EnhancedPlacementController {
 
 	@FXML
 	private void initialize() {
+		if (!FileOps.detectDBFile("epdb.db")) {
+			outputMessage(AlertType.ERROR, "Cannout run Enhanced Placement due to missing database file (epdb.db). Closing program.");
+			Platform.exit();
+			System.exit(0);
+		}
+		if (FileOps.detectDBFile("epdb.db.bak")) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Database Backup Detected");
+			alert.setHeaderText("Database Backup Detected");
+			alert.setContentText("A backup of the Enhanced Placement database (epdb.db.bak) was detected. This may have been the result of a crash or other error, and it is recommended that you restore this backup in order to avoid data loss. Would you like to restore the backup?");
+			ButtonType restoreButtonType = new ButtonType("Restore", ButtonData.OK_DONE);
+			alert.getDialogPane().getButtonTypes().clear();
+			alert.getDialogPane().getButtonTypes().addAll(restoreButtonType, ButtonType.CANCEL);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+			    FileOps.restoreDB();
+			} else {}
+		}
 		searchHBox.managedProperty().bind(searchHBox.visibleProperty());
 		searchHBox.setVisible(false);
 		schedule = Schedule.getSchedule();
@@ -104,10 +126,9 @@ public class EnhancedPlacementController {
 	        searchCodeColumn.setPrefWidth(newColumnWidth);
 		});
 		try {
-			ArrayList<Course> courses = SQL.getAllCourses();
-			ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
-			courseList.getItems().addAll(coursesToAdd);
+			visualizeCourses(SQL.getAllCourses());
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 			Platform.exit();
 			System.exit(0);
@@ -124,9 +145,9 @@ public class EnhancedPlacementController {
 					controller.initializeCourse(newSelection.getFastSearch());
 					dialog.setOnHiding(event -> {showSchedule();}); 
 					dialog.show();
-				} catch(Exception error) {
-					error.printStackTrace();
-					outputMessage(AlertType.ERROR, error.getMessage());
+				} catch(Exception e) {
+					e.printStackTrace();
+					outputMessage(AlertType.ERROR, e.getMessage());
 				}
 		    }
 		});
@@ -144,11 +165,9 @@ public class EnhancedPlacementController {
 	private void showAllCourses() {
 		if (tempCourse == null && searchString.equals("")) {
 			try {
-				courseList.getItems().clear();
-				ArrayList<Course> courses = SQL.getAllCourses();
-				ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
-				courseList.getItems().addAll(coursesToAdd);
+				visualizeCourses(SQL.getAllCourses());
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
 			}
 		} else {
@@ -157,18 +176,18 @@ public class EnhancedPlacementController {
 				try {
 					coursesFound = SQL.getCoursesBasicSearch(searchString);
 				} catch (Exception e) {
+					e.printStackTrace();
 					outputMessage(AlertType.ERROR, e.getMessage());
 				}
 			} else if (!(tempCourse == null)) {
 				try {
 					coursesFound = SQL.getCoursesAdvancedSearch(tempCourse);
 				} catch (Exception e) {
+					e.printStackTrace();
 					outputMessage(AlertType.ERROR, e.getMessage());
 				}
 			}
-			courseList.getItems().clear();
-		    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
-		    courseList.getItems().addAll(coursesToAdd);
+			visualizeCourses(coursesFound);
 		}
 	}
 	
@@ -178,6 +197,7 @@ public class EnhancedPlacementController {
 		try {
 			 choices = new ArrayList<>(SQL.getScheduleNames());
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
@@ -199,14 +219,14 @@ public class EnhancedPlacementController {
 			    	try {
 						schedule.addCourse(c);
 					} catch (Exception e) {
+						e.printStackTrace();
 						outputMessage(AlertType.ERROR, e.getMessage());
 					}
 			    }
-			    courseList.getItems().clear();
-			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(loadedCourses);
-			    courseList.getItems().addAll(coursesToAdd);
+			    visualizeCourses(loadedCourses);
 			    myScheduleMenuItem.setSelected(true);
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
 			}
 		}
@@ -240,6 +260,7 @@ public class EnhancedPlacementController {
 				}
 				SQL.saveSchedule(nameResult.get(), courseCodes);
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
 			}
 		}
@@ -258,9 +279,7 @@ public class EnhancedPlacementController {
 	private void showSchedule() {
 		courseList.getItems().clear();
 		if (myScheduleMenuItem.isSelected()) {
-			ArrayList<Course> courses = schedule.getCourses();
-			ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
-			courseList.getItems().addAll(coursesToAdd);
+			visualizeCourses(schedule.getCourses());
 		} else {
 			showAllCourses();
 		}
@@ -285,12 +304,11 @@ public class EnhancedPlacementController {
 			searchHBox.setVisible(true);
 			searchLabel.setText("Basic Search: " + searchString);
 			try {
-				ArrayList<Course> coursesFound = SQL.getCoursesBasicSearch(searchString);
-			    courseList.getItems().clear();
-			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
-			    courseList.getItems().addAll(coursesToAdd);
+				visualizeCourses(SQL.getCoursesBasicSearch(searchString));
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
+				courseList.getItems().clear();
 			}
 		}
 	}
@@ -312,6 +330,7 @@ public class EnhancedPlacementController {
 				subjects.getItems().add(s.getShortName());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		TextField courseNumber = new TextField();
@@ -330,6 +349,7 @@ public class EnhancedPlacementController {
 				collegeCodes.getItems().add(c.getShortName());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		grid.add(new Label("Subject:"), 0, 0);
@@ -374,25 +394,45 @@ public class EnhancedPlacementController {
 			searchHBox.setVisible(true);
 			searchLabel.setText("Advanced Search");
 			try {
-				ArrayList<Course> coursesFound = SQL.getCoursesAdvancedSearch(result.get());
-			    courseList.getItems().clear();
-			    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(coursesFound);
-			    courseList.getItems().addAll(coursesToAdd);
+				visualizeCourses(SQL.getCoursesAdvancedSearch(result.get()));
 			} catch (Exception e) {
+				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
 				courseList.getItems().clear();
 			}
 		}
 	}
 	
+	private void visualizeCourses(ArrayList<Course> courses) {
+		courseList.getItems().clear();
+	    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+	    courseList.getItems().addAll(coursesToAdd);
+	}
+	
 	@FXML
-	private void refreshCourses() {
-		outputMessage(AlertType.ERROR, "Refresh function has not been implemented.");
+	private void updateCourses() {
+		searchHBox.setVisible(true);
+		searchLabel.setText("Updating database with content from Hendrix Course Database API, please wait...");
+		clearSearchButton.setVisible(false);
+		courseList.setDisable(true);
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), ae -> {
+			try {
+				Refresher.refreshDB();
+			} catch (Exception e) {
+				e.printStackTrace();
+				outputMessage(AlertType.ERROR, e.getMessage());
+				FileOps.restoreDB();
+			}
+			clearSearchButton.setVisible(true);
+			searchHBox.setVisible(false);
+			courseList.setDisable(false);
+			showAllCourses();
+		}));
+		timeline.play();
 	}
 	
 	private void outputMessage(AlertType alertType, String message) {
 		Alert alert = new Alert(alertType, message);
 		alert.showAndWait();
 	}
-
 }

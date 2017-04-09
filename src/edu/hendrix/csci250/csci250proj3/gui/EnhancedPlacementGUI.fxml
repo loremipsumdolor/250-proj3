@@ -23,7 +23,7 @@
               <CheckMenuItem fx:id="myScheduleMenuItem" mnemonicParsing="false" onAction="#showSchedule" text="My Schedule" />
               <MenuItem fx:id="loadScheduleMenuItem" mnemonicParsing="false" onAction="#loadSchedule" text="Load Schedule" />
               <MenuItem fx:id="saveScheduleMenuItem" mnemonicParsing="false" onAction="#saveSchedule" text="Save Schedule" />
-              <MenuItem fx:id="refreshMenuItem" mnemonicParsing="false" onAction="#refreshCourses" text="Refresh" />
+              <MenuItem fx:id="updateDBMenuItem" mnemonicParsing="false" onAction="#updateCourses" text="Update Course Database" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>
