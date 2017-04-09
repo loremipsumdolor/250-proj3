@@ -20,13 +20,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <CheckMenuItem fx:id="myScheduleMenuItem" mnemonicParsing="false" onAction="#showSchedule" text="My Schedule" />
-              <MenuItem fx:id="loadScheduleMenuItem" mnemonicParsing="false" onAction="#loadSchedule" text="Load Schedule" />
-              <MenuItem fx:id="saveScheduleMenuItem" mnemonicParsing="false" onAction="#saveSchedule" text="Save Schedule" />
               <MenuItem fx:id="updateDBMenuItem" mnemonicParsing="false" onAction="#updateCourses" text="Update Course Database" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Schedule">
+              <items>
+                <CheckMenuItem fx:id="showScheduleMenuItem" mnemonicParsing="false" onAction="#showSchedule" text="Show Schedule" />
+                <MenuItem fx:id="loadScheduleMenuItem" mnemonicParsing="false" onAction="#loadSchedule" text="Load Schedule" />
+                <MenuItem fx:id="saveScheduleMenuItem" mnemonicParsing="false" onAction="#saveSchedule" text="Save Schedule" />
+                <MenuItem fx:id="deleteScheduleMenuItem" mnemonicParsing="false" onAction="#deleteSchedule" text="Delete Schedule" />
+              </items>
+            </Menu>
             <Menu mnemonicParsing="false" text="Search">
               <items>
                 <MenuItem fx:id="basicSearchMenuItem" mnemonicParsing="false" onAction="#basicSearch" text="Basic Search" />

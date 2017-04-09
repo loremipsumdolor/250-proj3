@@ -44,15 +44,17 @@ import javafx.scene.control.Label;
 
 public class EnhancedPlacementController {
 	@FXML
-	CheckMenuItem myScheduleMenuItem;
+	MenuItem updateDBMenuItem;
+	@FXML
+	MenuItem exitMenuItem;
+	@FXML
+	CheckMenuItem showScheduleMenuItem;
 	@FXML
 	MenuItem loadScheduleMenuItem;
 	@FXML
 	MenuItem saveScheduleMenuItem;
 	@FXML
-	MenuItem updateDBMenuItem;
-	@FXML
-	MenuItem exitMenuItem;
+	MenuItem deleteScheduleMenuItem;
 	@FXML
 	MenuItem basicSearchMenuItem;
 	@FXML
@@ -225,7 +227,7 @@ public class EnhancedPlacementController {
 					}
 			    }
 			    visualizeCourses(loadedCourses);
-			    myScheduleMenuItem.setSelected(true);
+			    showScheduleMenuItem.setSelected(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 				outputMessage(AlertType.ERROR, e.getMessage());
@@ -268,6 +270,42 @@ public class EnhancedPlacementController {
 	}
 	
 	@FXML
+	private void deleteSchedule() {
+		ArrayList<String> choices = null;
+		try {
+			 choices = new ArrayList<>(SQL.getScheduleNames());
+		} catch (Exception e) {
+			e.printStackTrace();
+			outputMessage(AlertType.ERROR, e.getMessage());
+		}
+		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+		dialog.setTitle("Load Schedule");
+		dialog.setHeaderText("Load Schedule");
+		dialog.setContentText("Select a name:");
+		ButtonType loadButtonType = new ButtonType("Delete", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().clear();
+		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirm Schedule Delete");
+			alert.setHeaderText("Delete Confirmation");
+			alert.setContentText("About to delete " + result.get() + ". Proceed?");
+			Optional<ButtonType> confirmResult = alert.showAndWait();
+			if (confirmResult.get() == ButtonType.OK) {
+				try {
+					SQL.deleteSchedule(result.get());
+				    showAllCourses();
+				    showScheduleMenuItem.setSelected(false);
+				} catch (Exception e) {
+					e.printStackTrace();
+					outputMessage(AlertType.ERROR, e.getMessage());
+				}
+			} else {}
+		}
+	}
+	
+	@FXML
 	private void aboutDialog() {
 		Alert aboutBox = new Alert(AlertType.INFORMATION);
 		aboutBox.setTitle("About Enhanced Placement");
@@ -279,7 +317,7 @@ public class EnhancedPlacementController {
 	@FXML
 	private void showSchedule() {
 		courseList.getItems().clear();
-		if (myScheduleMenuItem.isSelected()) {
+		if (showScheduleMenuItem.isSelected()) {
 			visualizeCourses(schedule.getCourses());
 		} else {
 			showAllCourses();
@@ -297,8 +335,8 @@ public class EnhancedPlacementController {
 		dialog.getDialogPane().getButtonTypes().addAll(searchButtonType, ButtonType.CANCEL);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-			if (myScheduleMenuItem.isSelected()) {
-				myScheduleMenuItem.setSelected(false);
+			if (showScheduleMenuItem.isSelected()) {
+				showScheduleMenuItem.setSelected(false);
 				showSchedule();
 			}
 			searchString = result.get();
@@ -391,6 +429,10 @@ public class EnhancedPlacementController {
 		});
 		Optional<Course> result = dialog.showAndWait();
 		if (result.isPresent()){
+			if (showScheduleMenuItem.isSelected()) {
+				showScheduleMenuItem.setSelected(false);
+				showSchedule();
+			}
 			tempCourse = result.get();
 			searchHBox.setVisible(true);
 			searchLabel.setText("Advanced Search");
