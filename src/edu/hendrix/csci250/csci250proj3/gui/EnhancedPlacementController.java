@@ -208,10 +208,14 @@ public class EnhancedPlacementController {
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
 		dialog.setTitle("Load Schedule");
 		dialog.setHeaderText("Load Schedule");
-		dialog.setContentText("Select a name:");
+		dialog.setContentText("Select a schedule:");
 		ButtonType loadButtonType = new ButtonType("Load", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().clear();
 		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		dialog.setGraphic(graphic);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
 			schedule.clear();
@@ -247,10 +251,14 @@ public class EnhancedPlacementController {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Save Schedule");
 		dialog.setHeaderText("Save Schedule");
-		dialog.setContentText("Enter a name:");
+		dialog.setContentText("Enter a name for the schedule:");
 		ButtonType saveButtonType = new ButtonType("Save", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().clear();
 		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		dialog.setGraphic(graphic);
 		Optional<String> nameResult = dialog.showAndWait();
 		if (nameResult.isPresent()){
 			try {
@@ -282,18 +290,22 @@ public class EnhancedPlacementController {
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
-		dialog.setTitle("Load Schedule");
-		dialog.setHeaderText("Load Schedule");
-		dialog.setContentText("Select a name:");
+		dialog.setTitle("Delete Schedule");
+		dialog.setHeaderText("Delete Schedule");
+		dialog.setContentText("Select a schedule to delete:");
 		ButtonType loadButtonType = new ButtonType("Delete", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().clear();
 		dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		dialog.setGraphic(graphic);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Confirm Schedule Delete");
 			alert.setHeaderText("Delete Confirmation");
-			alert.setContentText("About to delete " + result.get() + ". Proceed?");
+			alert.setContentText("About to delete schedule " + result.get() + ". Proceed?");
 			Optional<ButtonType> confirmResult = alert.showAndWait();
 			if (confirmResult.get() == ButtonType.OK) {
 				try {
@@ -314,7 +326,7 @@ public class EnhancedPlacementController {
 		aboutBox.initOwner((Stage)courseList.getScene().getWindow());
 		aboutBox.setTitle("About Enhanced Placement");
 		aboutBox.setHeaderText("About Enhanced Placement");
-		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq\n\nCheck Mark by jeff from the Noun Project");
+		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq\n\nCheck Mark by jeff from the Noun Project, edited by Jacob Turner");
 		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
 		graphic.setFitHeight(48);
 		graphic.setFitWidth(48);
@@ -335,12 +347,16 @@ public class EnhancedPlacementController {
 	@FXML
 	private void basicSearch() {
 		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Search - Enhanced Placement");
+		dialog.setTitle("Basic Search");
 		dialog.setHeaderText("Search Courses");
 		dialog.setContentText("Please enter a search term:");
 		ButtonType searchButtonType = new ButtonType("Search", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().clear();
 		dialog.getDialogPane().getButtonTypes().addAll(searchButtonType, ButtonType.CANCEL);
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		dialog.setGraphic(graphic);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
 			if (showScheduleMenuItem.isSelected()) {
@@ -367,6 +383,10 @@ public class EnhancedPlacementController {
 		dialog.setHeaderText("Advanced Course Search");
 		ButtonType searchButtonType = new ButtonType("Search", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().addAll(searchButtonType, ButtonType.CANCEL);
+		ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+		graphic.setFitHeight(48);
+		graphic.setFitWidth(48);
+		dialog.setGraphic(graphic);
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);

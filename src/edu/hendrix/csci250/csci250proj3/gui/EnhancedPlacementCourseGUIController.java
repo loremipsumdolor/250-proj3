@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -133,11 +134,16 @@ public class EnhancedPlacementCourseGUIController {
 		try {
 			CollegiateCenterCode ccCode = SQL.getCode(shortName);
 			if (ccCode != null) {
-				Alert aboutBox = new Alert(AlertType.INFORMATION);
-				aboutBox.setTitle(ccCode.getLongName());
-				aboutBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
-				aboutBox.setContentText(ccCode.getDescription());
-				aboutBox.showAndWait();
+				Alert ccCodeBox = new Alert(AlertType.INFORMATION);
+				ccCodeBox.initOwner((Stage)close.getScene().getWindow());
+				ccCodeBox.setTitle(ccCode.getLongName());
+				ccCodeBox.setHeaderText(ccCode.getLongName() + " (" + ccCode.getShortName() + ")");
+				ccCodeBox.setContentText(ccCode.getDescription());
+				ImageView graphic = new ImageView(new Image("file:ep-icon.png"));
+				graphic.setFitHeight(48);
+				graphic.setFitWidth(48);
+				ccCodeBox.setGraphic(graphic);
+				ccCodeBox.showAndWait();
 			} else {
 				outputMessage(AlertType.ERROR, "Code not found.");
 			}

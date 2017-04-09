@@ -39,7 +39,7 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <Label text="Phone:" />
+                        <Label text="Phone: " />
                         <Label fx:id="phoneNumber" underline="true" />
                      </children>
                      <VBox.margin>
@@ -51,10 +51,13 @@
                </children>
             </VBox>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
       </HBox>
    </center>
    <left>
-      <ImageView fx:id="professorImage" fitHeight="210.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <ImageView fx:id="professorImage" fitHeight="208.0" fitWidth="163.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT">
          <BorderPane.margin>
             <Insets right="5.0" />
          </BorderPane.margin>
@@ -77,6 +80,9 @@
                </font>
             </Label>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
       </VBox>
    </top>
 </BorderPane>
