@@ -283,6 +283,65 @@ public class SQL {
 		return courseData;
 	}
 	
+	public static Professor getProfessor(String name) throws Exception {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
+		}
+		Professor professorData = null;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM professors WHERE name IN ('" + name + "') LIMIT 1;");
+			if (rs.next()) {
+				professorData = new Professor(rs.getString("name"), rs.getString("title"), 
+								rs.getString("office"), rs.getString("email"), rs.getString("phone"),
+								rs.getString("picture"));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Could not retrieve professor with name " + name + ".");
+		}
+		return professorData;
+	}
+	
+	public static ArrayList<Course> getProfessorCourses(String name) throws Exception {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:epdb.db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("SQL connection error. Is epdb.db present in the root directory?");
+		}
+		ArrayList<Course> professorCourseData = new ArrayList<Course>();
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM courses WHERE (instructors LIKE '%" + name + "%');");
+			while (rs.next()) {
+				ArrayList<String> instructors = new ArrayList<String>(Arrays.asList(rs.getString("instructors").split("; ")));
+				ArrayList<String> collegeCodes = new ArrayList<String>(Arrays.asList(rs.getString("college_codes").split(", ")));
+				professorCourseData.add(new Course(rs.getString("course_code"), rs.getString("semester"), 
+						rs.getString("subject_code"), rs.getString("course_number"), 
+						rs.getString("section_number"), Integer.parseInt(rs.getString("fast_search")),
+						rs.getString("title"), instructors, rs.getString("period"),
+						rs.getString("building"), rs.getString("room"), rs.getString("description"),
+						collegeCodes));
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("No courses found.");
+		}
+		return professorCourseData;
+	}
+	
 	public static CollegiateCenterCode getCode(String shortName) throws Exception {
 		try {
 			Class.forName("org.sqlite.JDBC");

@@ -6,16 +6,19 @@ import edu.hendrix.csci250.csci250proj3.SQL;
 import edu.hendrix.csci250.csci250proj3.Schedule;
 import edu.hendrix.csci250.csci250proj3.TimeCode;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 
 public class EnhancedPlacementCourseGUIController {
 	
@@ -81,6 +84,9 @@ public class EnhancedPlacementCourseGUIController {
 				profLabel.setText(p);
 				profLabel.setUnderline(true);
 				profLabel.setPadding(new Insets(0, 3, 0, 0));
+				profLabel.setOnMouseClicked(event -> showProfessor(((Label)event.getSource()).getText()));
+				profLabel.setOnMouseEntered(event -> profLabel.getScene().setCursor(Cursor.HAND));
+				profLabel.setOnMouseExited(event -> profLabel.getScene().setCursor(Cursor.DEFAULT));
 				instructorHBox.getChildren().add(profLabel);
 			}
 			for (String c: course.getCollegeCodes()) {
@@ -132,6 +138,22 @@ public class EnhancedPlacementCourseGUIController {
 				outputMessage(AlertType.ERROR, "Code not found.");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			outputMessage(AlertType.ERROR, e.getMessage());
+		}
+	}
+	
+	private void showProfessor(String name) {
+		try {
+			Stage dialog = new Stage();
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.initOwner(close.getScene().getWindow());
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("EnhancedPlacementProfessorGUI.fxml"));
+			dialog.setScene(new Scene((BorderPane)loader.load()));
+			EnhancedPlacementProfessorGUIController controller = loader.<EnhancedPlacementProfessorGUIController>getController();
+			controller.initializeProfessor(name); 
+			dialog.show();
+		} catch(Exception e) {
 			e.printStackTrace();
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}

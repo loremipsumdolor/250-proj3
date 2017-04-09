@@ -1,11 +1,11 @@
 package edu.hendrix.csci250.csci250proj3;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Professor {
 	
 	private String name, title, office, email, phone, picture;
-	private ArrayList<Course> coursesTeaching;
+	private HashMap<String, Integer> coursesTeaching;
 	
 	public Professor(String name, String title, String office, String email, String phone, String picture) {
 		this.name = name;
@@ -13,12 +13,12 @@ public class Professor {
 		this.office = office;
 		this.email = email;
 		this.phone = phone;
-		this.coursesTeaching = new ArrayList<Course>();
+		this.coursesTeaching = new HashMap<String, Integer>();
 		this.picture = picture;
 	}
 	
-	public void addCourse(Course course) {
-		this.coursesTeaching.add(course);
+	public void addCourse(String courseInfo, int fastSearch) {
+		this.coursesTeaching.put(courseInfo, fastSearch);
 	}
 	
 	public String getName() {
@@ -41,8 +41,12 @@ public class Professor {
 		return this.phone;
 	}
 	
-	public ArrayList<Course> getCourseList() {
+	public HashMap<String, Integer> getCourseList() {
 		return this.coursesTeaching;
+	}
+	
+	public int getCourseInList(String courseInfo) {
+		return this.coursesTeaching.get(courseInfo);
 	}
 	
 	public String getPicture() {
