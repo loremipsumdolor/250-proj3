@@ -13,6 +13,7 @@ public class FileOps {
 	}
 
 	public static void backupDB() throws Exception {
+		deleteDBBackup();
 		Files.copy(new File("epdb.db").toPath(), new File("epdb.db.bak").toPath());
 	}
 	
