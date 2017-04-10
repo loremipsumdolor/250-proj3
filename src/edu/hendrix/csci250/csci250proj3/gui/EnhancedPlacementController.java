@@ -12,16 +12,16 @@ import edu.hendrix.csci250.csci250proj3.Refresher;
 import edu.hendrix.csci250.csci250proj3.SQL;
 import edu.hendrix.csci250.csci250proj3.Schedule;
 import edu.hendrix.csci250.csci250proj3.Period;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -34,7 +34,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -71,6 +70,12 @@ public class EnhancedPlacementController {
 	@FXML
 	Button clearSearchButton;
 	@FXML
+	HBox updateHBox;
+	@FXML
+	Label updateLabel;
+	@FXML
+	ProgressBar updateProgressBar;
+	@FXML
 	TableView<Course> courseList;
 	@FXML
 	TableColumn<Course, String> courseCodeColumn;
@@ -84,7 +89,7 @@ public class EnhancedPlacementController {
 	TableColumn<Course, String> timeColumn;
 	@FXML
 	TableColumn<Course, Integer> searchCodeColumn;
-	
+
 	Schedule schedule;
 	Course tempCourse = null;
 	String searchString = "";
@@ -109,6 +114,8 @@ public class EnhancedPlacementController {
 			    FileOps.restoreDB();
 			} else {}
 		}
+		updateHBox.managedProperty().bind(updateHBox.visibleProperty());
+		updateHBox.setVisible(false);
 		searchHBox.managedProperty().bind(searchHBox.visibleProperty());
 		searchHBox.setVisible(false);
 		schedule = Schedule.getSchedule();
@@ -492,24 +499,39 @@ public class EnhancedPlacementController {
 	
 	@FXML
 	private void updateCourses() {
-		searchHBox.setVisible(true);
-		searchLabel.setText("Updating database with content from Hendrix Course Database API, please wait...");
-		clearSearchButton.setVisible(false);
+		updateHBox.setVisible(true);
+		updateProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 		courseList.setDisable(true);
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), ae -> {
-			try {
-				Refresher.refreshDB();
-			} catch (Exception e) {
-				e.printStackTrace();
-				outputMessage(AlertType.ERROR, e.getMessage());
-				FileOps.restoreDB();
+		new Thread(updater).start();
+	}
+	
+	Task<Void> updater = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            try {
+                Thread.sleep(2000);
+                try {
+                	Refresher.refreshDB();
+        		} catch (Exception e) {
+        			e.printStackTrace();
+        			outputMessage(AlertType.ERROR, e.getMessage());
+        			FileOps.restoreDB();
+        		}
+        		resetWindowAfterRefresh();
+        	} catch (InterruptedException e) {}
+            return null;
+        }
+    };
+	
+	private void resetWindowAfterRefresh() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				updateHBox.setVisible(false);
+				courseList.setDisable(false);
+				showAllCourses();
 			}
-			clearSearchButton.setVisible(true);
-			searchHBox.setVisible(false);
-			courseList.setDisable(false);
-			showAllCourses();
-		}));
-		timeline.play();
+		});
 	}
 	
 	private void outputMessage(AlertType alertType, String message) {
