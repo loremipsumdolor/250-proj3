@@ -214,6 +214,7 @@ public class EnhancedPlacementController {
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+		dialog.initOwner(courseList.getScene().getWindow());
 		dialog.setTitle("Load Schedule");
 		dialog.setHeaderText("Load Schedule");
 		dialog.setContentText("Select a schedule:");
@@ -257,6 +258,7 @@ public class EnhancedPlacementController {
 		    courseCodes.add(c.getFastSearch());
 		}
 		TextInputDialog dialog = new TextInputDialog();
+		dialog.initOwner(courseList.getScene().getWindow());
 		dialog.setTitle("Save Schedule");
 		dialog.setHeaderText("Save Schedule");
 		dialog.setContentText("Enter a name for the schedule:");
@@ -298,6 +300,7 @@ public class EnhancedPlacementController {
 			outputMessage(AlertType.ERROR, e.getMessage());
 		}
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+		dialog.initOwner(courseList.getScene().getWindow());
 		dialog.setTitle("Delete Schedule");
 		dialog.setHeaderText("Delete Schedule");
 		dialog.setContentText("Select a schedule to delete:");
@@ -331,7 +334,7 @@ public class EnhancedPlacementController {
 	@FXML
 	private void aboutDialog() {
 		Alert aboutBox = new Alert(AlertType.INFORMATION);
-		aboutBox.initOwner((Stage)courseList.getScene().getWindow());
+		aboutBox.initOwner(courseList.getScene().getWindow());
 		aboutBox.setTitle("About Enhanced Placement");
 		aboutBox.setHeaderText("About Enhanced Placement");
 		aboutBox.setContentText("Enhanced Placement v1.0\nCreated for Dr. Ferrer's CSCI 250 Spring 2017 class\n\nProject members:\n* Jacob Turner\n* Taylor Barker\n* Michael Spainhour\n* Uzair Tariq\n\nCheck Mark by jeff from the Noun Project, edited by Jacob Turner");
@@ -355,6 +358,7 @@ public class EnhancedPlacementController {
 	@FXML
 	private void basicSearch() {
 		TextInputDialog dialog = new TextInputDialog();
+		dialog.initOwner(courseList.getScene().getWindow());
 		dialog.setTitle("Basic Search");
 		dialog.setHeaderText("Search Courses");
 		dialog.setContentText("Please enter a search term:");
@@ -387,6 +391,7 @@ public class EnhancedPlacementController {
 	@FXML
 	private void advancedSearch() {
 		Dialog<Course> dialog = new Dialog<>();
+		dialog.initOwner(courseList.getScene().getWindow());
 		dialog.setTitle("Advanced Search");
 		dialog.setHeaderText("Advanced Course Search");
 		ButtonType searchButtonType = new ButtonType("Search", ButtonData.OK_DONE);
@@ -501,6 +506,7 @@ public class EnhancedPlacementController {
 	private void updateCourses() {
 		updateHBox.setVisible(true);
 		updateProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+		updateProgressBar.setStyle("-fx-accent: #f5822a;");
 		courseList.setDisable(true);
 		new Thread(updater).start();
 	}
@@ -539,7 +545,7 @@ public class EnhancedPlacementController {
 			@Override
 			public void run() {
 				Alert alert = new Alert(alertType, message);
-				alert.initOwner((Stage)courseList.getScene().getWindow());
+				alert.initOwner(courseList.getScene().getWindow());
 				alert.showAndWait();
 			}
 		});
