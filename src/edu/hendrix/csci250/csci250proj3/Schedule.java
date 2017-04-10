@@ -27,12 +27,11 @@ public class Schedule {
 				if (course.getPeriod().equals(c.getPeriod())) {
 					throw new Exception("You already have a class in this time slot.");
 				}
+			}
+			if (c.getSemester().equals("1S")) {
+				firstSemCourses++;
 			} else {
-				if (c.getSemester().equals("1S")) {
-					firstSemCourses++;
-				} else {
-					secondSemCourses++;
-				}
+				secondSemCourses++;
 			}
 		}
 		if (firstSemCourses == 4 && !course.getCollegeCodes().contains("PA")) {
