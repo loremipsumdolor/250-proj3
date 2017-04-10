@@ -1,17 +1,19 @@
 package edu.hendrix.csci250.csci250proj3;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Schedule implements Serializable{
+public class Schedule {
 
-	private static final long serialVersionUID = 1L;
 	private static ArrayList<Course> schedule = new ArrayList<>();
 	private final static Schedule instance = new Schedule();
 	
 	public static Schedule getSchedule() {
 		return instance;
+	}
+	
+	public void clearSchedule() {
+		schedule.clear();
 	}
 	
 	public void addCourse(Course course) throws Exception {
@@ -46,7 +48,11 @@ public class Schedule implements Serializable{
 	}
 	
 	public int getLength() {
-		return schedule.size();
+		int length = 0;
+		for (Course c : schedule) {
+			length++;
+		}
+		return length;
 	}
 	
 	public void removeCourse(int fastSearch) {

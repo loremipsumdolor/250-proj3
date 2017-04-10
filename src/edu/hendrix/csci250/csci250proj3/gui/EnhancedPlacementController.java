@@ -2,6 +2,7 @@ package edu.hendrix.csci250.csci250proj3.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import edu.hendrix.csci250.csci250proj3.AcademicSubject;
@@ -474,9 +475,9 @@ public class EnhancedPlacementController {
 		}
 	}
 	
-	private void visualizeCourses(ArrayList<Course> courses) {
+	private void visualizeCourses(ArrayList<Course> list) {
 		courseList.getItems().clear();
-	    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(courses);
+	    ObservableList<Course> coursesToAdd = FXCollections.observableArrayList(list);
 	    courseList.getItems().addAll(coursesToAdd);
 	}
 	
