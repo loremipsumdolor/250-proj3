@@ -4,7 +4,7 @@ import edu.hendrix.csci250.csci250proj3.CollegiateCenterCode;
 import edu.hendrix.csci250.csci250proj3.Course;
 import edu.hendrix.csci250.csci250proj3.SQL;
 import edu.hendrix.csci250.csci250proj3.Schedule;
-import edu.hendrix.csci250.csci250proj3.TimeCode;
+import edu.hendrix.csci250.csci250proj3.Period;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -27,8 +27,8 @@ public class EnhancedPlacementCourseGUIController {
 	@FXML Label courseTitle;
 	@FXML Label courseCode;
 	@FXML Label semester;
-	@FXML Label timeCode;
-	@FXML Tooltip timeCodeTooltip;
+	@FXML Label period;
+	@FXML Tooltip periodTooltip;
 	@FXML Label fastSearchCode;
 	@FXML Label courseLocation;
 	@FXML Label courseDescription;
@@ -76,7 +76,7 @@ public class EnhancedPlacementCourseGUIController {
 	public void initializeCourse(int fastSearch) {
 		try {
 			course = SQL.getCourse(fastSearch);
-			TimeCode timeCodeData = SQL.getTimeCode(course.getPeriod());
+			Period periodData = SQL.getPeriod(course.getPeriod());
 			courseTitle.setText(course.getTitle());
 			Stage stage = (Stage)close.getScene().getWindow();
 			stage.setTitle(courseTitle.getText());
@@ -106,11 +106,11 @@ public class EnhancedPlacementCourseGUIController {
 				}
 			}
 			courseLocation.setText(course.getBuilding() + " " + course.getRoom());
-			timeCode.setText(course.getPeriod());
-			timeCode.setOnMouseEntered(event -> timeCode.getScene().setCursor(Cursor.HAND));
-			timeCode.setOnMouseExited(event -> timeCode.getScene().setCursor(Cursor.DEFAULT));
-			if (timeCodeData != null) {
-				timeCodeTooltip.setText(timeCodeData.getDescription());
+			period.setText(course.getPeriod());
+			period.setOnMouseEntered(event -> period.getScene().setCursor(Cursor.HAND));
+			period.setOnMouseExited(event -> period.getScene().setCursor(Cursor.DEFAULT));
+			if (periodData != null) {
+				periodTooltip.setText(periodData.getDescription());
 			}
 			courseDescription.setText(course.getDescription());
 			if (schedule.containsCourse(course)) {

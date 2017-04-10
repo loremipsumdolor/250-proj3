@@ -333,13 +333,13 @@ public class SQL {
 		return codeData;
 	}
 	
-	public static TimeCode getTimeCode(String code) throws Exception {
+	public static Period getPeriod(String code) throws Exception {
 		openConnection();
-		TimeCode timeCode = null;
+		Period period = null;
 		try {
-			ResultSet rs = stmt.executeQuery("SELECT * FROM time_codes WHERE code IN ('" + code + "') LIMIT 1;");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM periods WHERE code IN ('" + code + "') LIMIT 1;");
 			if (rs.next()) {
-				timeCode = new TimeCode(rs.getString("code"), rs.getString("description"));
+				period = new Period(rs.getString("code"), rs.getString("description"));
 			}
 			rs.close();
 			closeConnection();
@@ -347,23 +347,23 @@ public class SQL {
 			e.printStackTrace();
 			throw new Exception("Could not retrieve time code " + code + ".");
 		}
-		return timeCode;
+		return period;
 	}
 	
-	public static ArrayList<TimeCode> getAllTimeCodes() throws Exception {
+	public static ArrayList<Period> getAllPeriods() throws Exception {
 		openConnection();
-		ArrayList<TimeCode> timeCodeData = new ArrayList<TimeCode>();
+		ArrayList<Period> periodData = new ArrayList<Period>();
 		try {
-			ResultSet rs = stmt.executeQuery("SELECT * FROM time_codes;");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM periods;");
 			while (rs.next()) {
-				timeCodeData.add(new TimeCode(rs.getString("code"), rs.getString("description")));
+				periodData.add(new Period(rs.getString("code"), rs.getString("description")));
 			}
 			closeConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("Could not retrieve time codes.");
 		}
-		return timeCodeData;
+		return periodData;
 	}
 
 	public static AcademicSubject getAcademicSubject(String shortName) throws Exception {

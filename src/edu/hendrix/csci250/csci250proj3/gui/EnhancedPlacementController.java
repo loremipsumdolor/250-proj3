@@ -11,6 +11,7 @@ import edu.hendrix.csci250.csci250proj3.FileOps;
 import edu.hendrix.csci250.csci250proj3.Refresher;
 import edu.hendrix.csci250.csci250proj3.SQL;
 import edu.hendrix.csci250.csci250proj3.Schedule;
+import edu.hendrix.csci250.csci250proj3.Period;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -405,7 +406,16 @@ public class EnhancedPlacementController {
 		TextField fastSearchCode = new TextField();
 		TextField title = new TextField();
 		TextField instructors = new TextField();
-		TextField period = new TextField();
+		ComboBox<String> period = new ComboBox<String>();
+		try {
+			ArrayList<Period> periodsListing = SQL.getAllPeriods();
+			for (Period t : periodsListing) {
+				period.getItems().add(t.getCode());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			outputMessage(AlertType.ERROR, e.getMessage());
+		}
 		TextField building = new TextField();
 		TextField room = new TextField();
 		TextField description = new TextField();
@@ -431,7 +441,7 @@ public class EnhancedPlacementController {
 		grid.add(title, 1, 4);
 		grid.add(new Label("Instructor:"), 0, 5);
 		grid.add(instructors, 1, 5);
-		grid.add(new Label("Time Code:"), 0, 6);
+		grid.add(new Label("Period:"), 0, 6);
 		grid.add(period, 1, 6);
 		grid.add(new Label("Building:"), 0, 7);
 		grid.add(building, 1, 7);
@@ -449,7 +459,7 @@ public class EnhancedPlacementController {
 		    	}
 		        return new Course("", semester.getText(), subjects.getSelectionModel().getSelectedItem(),
 		        		courseNumber.getText(), "", Integer.parseInt(fastSearchCode.getText()), title.getText(),
-		        		new ArrayList<String>(Arrays.asList(instructors.getText())), period.getText(),
+		        		new ArrayList<String>(Arrays.asList(instructors.getText())), period.getSelectionModel().getSelectedItem(),
 		        		building.getText(), room.getText(), description.getText(),
 		        		new ArrayList<String>(Arrays.asList(collegeCodes.getSelectionModel().getSelectedItem())));
 		    }

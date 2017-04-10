@@ -1,11 +1,11 @@
 package edu.hendrix.csci250.csci250proj3;
 
-public class TimeCode {
+public class Period {
 	private String code, description;
 	
-	public TimeCode() {}
+	public Period() {}
 	
-	public TimeCode(String code, String description) {
+	public Period(String code, String description) {
 		this.code = code;
 		this.description = description;
 	}

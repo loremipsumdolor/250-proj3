@@ -72,15 +72,15 @@
                      <children>
                         <HBox>
                            <children>
-                              <Label text="Time Code: " />
+                              <Label text="Period: " />
                               <Label fx:id="semester">
                                  <padding>
                                     <Insets right="3.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="timeCode" underline="true">
+                              <Label fx:id="period" underline="true">
                                  <tooltip>
-                                    <Tooltip fx:id="timeCodeTooltip" />
+                                    <Tooltip fx:id="periodTooltip" />
                                  </tooltip></Label>
                            </children>
                            <VBox.margin>
