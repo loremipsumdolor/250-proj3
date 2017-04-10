@@ -535,8 +535,13 @@ public class EnhancedPlacementController {
 	}
 	
 	private void outputMessage(AlertType alertType, String message) {
-		Alert alert = new Alert(alertType, message);
-		alert.initOwner((Stage)courseList.getScene().getWindow());
-		alert.showAndWait();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Alert alert = new Alert(alertType, message);
+				alert.initOwner((Stage)courseList.getScene().getWindow());
+				alert.showAndWait();
+			}
+		});
 	}
 }
