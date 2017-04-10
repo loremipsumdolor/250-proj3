@@ -12,9 +12,6 @@ public class Refresher {
 	private final static String HENDRIX_COURSE_URL = "http://hoike.hendrix.edu/api/CourseModel?$filter=YearCode%20eq%202017&$orderby=CourseCode&$skip=0";
 
 	public static void refreshDB() throws Exception {
-		String building = "";
-		String room = "";
-		String description = "";
 		FileOps.backupDB();
 		SQL.deleteAllCourses();
 		ArrayList<Course> courses = new ArrayList<Course>();
@@ -23,6 +20,9 @@ public class Refresher {
 		JsonArray items = Json.parse(scanner.next()).asObject().get("value").asArray();
 		scanner.close();
 		for (JsonValue item : items) {
+			String building = "";
+			String room = "";
+			String description = "";
 			String courseCode = item.asObject().getString("CourseCode", "").replaceAll("  ", " ").trim();
 			String semester = item.asObject().getString("TermCode", "");
 			String subjectCode = item.asObject().getString("SubjectCode", "");
