@@ -39,12 +39,25 @@ public class ScheduleTest {
 	@Test(expected=Exception.class)
 	public void testAddSameCourse() throws Exception {
 		Course course1 = new Course("CSCI 352 01", "2S", "CSCI", "352", "01", 24196, "Scalable Software",
-				new ArrayList<String>(Arrays.asList("Ferrer, Gabe")), "A2", "MCREY", "315",
+				new ArrayList<String>(Arrays.asList("Ferrer, Gabe")), "A3", "MCREY", "315",
 				"Introduction to the computer science concepts necessary for the development of large software systems. Further exploration of object-oriented development, testing, and version control techniques introduced in CSCI 151. Emphasis placed on user-centric interface design and writing precise requirements. Projects incorporate relevant technologies for modern software design, including network programming, databases, and mobile devices. Assignments emphasize the integration of multiple concepts in the context of developing realistic software applications. Students complete several projects in teams. Prerequisite: CSCI 151",
 				new ArrayList<String>(Arrays.asList("NS")));
 		Course course2 = new Course("CSCI 352 01", "2S", "CSCI", "352", "01", 24196, "Scalable Software",
-				new ArrayList<String>(Arrays.asList("Ferrer, Gabe")), "A2", "MCREY", "315",
+				new ArrayList<String>(Arrays.asList("Ferrer, Gabe")), "A3", "MCREY", "315",
 				"Introduction to the computer science concepts necessary for the development of large software systems. Further exploration of object-oriented development, testing, and version control techniques introduced in CSCI 151. Emphasis placed on user-centric interface design and writing precise requirements. Projects incorporate relevant technologies for modern software design, including network programming, databases, and mobile devices. Assignments emphasize the integration of multiple concepts in the context of developing realistic software applications. Students complete several projects in teams. Prerequisite: CSCI 151",
+				new ArrayList<String>(Arrays.asList("NS")));
+		schedule.addCourse(course1);
+		schedule.addCourse(course2);
+	}
+	
+	@Test(expected = Exception.class)
+	public void testAddTimeConflictingCourse() throws Exception {
+		Course course1 = new Course("CSCI 352 01", "2S", "CSCI", "352", "01", 24196, "Scalable Software",
+				new ArrayList<String>(Arrays.asList("Ferrer, Gabe")), "A3", "MCREY", "315",
+				"Introduction to the computer science concepts necessary for the development of large software systems. Further exploration of object-oriented development, testing, and version control techniques introduced in CSCI 151. Emphasis placed on user-centric interface design and writing precise requirements. Projects incorporate relevant technologies for modern software design, including network programming, databases, and mobile devices. Assignments emphasize the integration of multiple concepts in the context of developing realistic software applications. Students complete several projects in teams. Prerequisite: CSCI 151",
+				new ArrayList<String>(Arrays.asList("NS")));
+		Course course2 = new Course("ANTH 200 01", "2S", "ANTH", "352", "01", 24196, "Buried Cities and Lost Tribes",
+				new ArrayList<String>(Arrays.asList("Hill, Brett")), "A3", "MILLS", "B", "This is a test",
 				new ArrayList<String>(Arrays.asList("NS")));
 		schedule.addCourse(course1);
 		schedule.addCourse(course2);
