@@ -61,7 +61,7 @@ public class Schedule {
 	
 	public boolean containsCourse(Course course) {
 		for (Course c : schedule) {
-			if (Integer.toString(c.getFastSearch()).equals(Integer.toString(course.getFastSearch()))) {
+			if (c.getFastSearch() == course.getFastSearch()) {
 				return true;
 			}
 		}
