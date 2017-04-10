@@ -48,11 +48,7 @@ public class Schedule {
 	}
 	
 	public int getLength() {
-		int length = 0;
-		for (Course c : schedule) {
-			length++;
-		}
-		return length;
+		return schedule.size();
 	}
 	
 	public void removeCourse(int fastSearch) {
@@ -75,9 +71,5 @@ public class Schedule {
 	
 	public ArrayList<Course> getCourses() {
 		return schedule;
-	}
-	
-	public void clear() {
-		schedule = new ArrayList<>();
 	}
 }

@@ -2,7 +2,6 @@ package edu.hendrix.csci250.csci250proj3.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import edu.hendrix.csci250.csci250proj3.AcademicSubject;
@@ -219,7 +218,7 @@ public class EnhancedPlacementController {
 		dialog.setGraphic(graphic);
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-			schedule.clear();
+			schedule.clearSchedule();
 			try {
 				ArrayList<Integer> loadedCourseSearch = SQL.getSchedule(result.get());
 			    ArrayList<Course> loadedCourses = new ArrayList<Course>();
