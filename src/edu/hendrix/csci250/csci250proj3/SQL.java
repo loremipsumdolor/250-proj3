@@ -191,7 +191,7 @@ public class SQL {
 				searchString.append("instructors LIKE '%" + tempCourse.getInstructorsArrayList().get(0) + "%'");
 				addAnd = !addAnd;
 			}
-			if (!tempCourse.getPeriod().equals("")) {
+			if (!(tempCourse.getPeriod() == null)) {
 				if (addAnd) {
 					searchString.append(" and ");
 					addAnd = !addAnd;
